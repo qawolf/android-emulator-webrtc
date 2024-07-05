@@ -76,7 +76,7 @@ $(PROTODIR)/%_pb.js  : $(PROTOSRCDIR)/%.proto $(PROTODIR) protoc-gen-grpc-web
 	        -I/usr/local/include -I$(PROTODIR) -I$(PROTOSRCDIR) \
 			--plugin=protoc-gen-grpc-web=$(CURRENT_DIR)/protoc-gen-grpc-web \
 			--js_out=import_style=commonjs,binary:$(PROTODIR) \
-			--grpc-web_out=import_style=commonjs,mode=grpcwebtext:$(PROTODIR) \
+			--grpc-web_out=import_style=typescript,mode=grpcwebtext:$(PROTODIR) \
 			$<
 	$(PREFIX_ESLINT) $@
 
