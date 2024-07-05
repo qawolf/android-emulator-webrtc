@@ -15,7 +15,7 @@
  */
 import { EventEmitter } from "events";
 import "../../../proto/emulator_controller_pb";
-import { EmulatorControllerService } from "../../../proto/emulator_web_client";
+import { EmulatorControllerService, NopAuthenticator } from "../../../proto/emulator_web_client";
 
 /**
  * Observe the logcat stream from the emulator.
@@ -29,6 +29,15 @@ import { EmulatorControllerService } from "../../../proto/emulator_web_client";
  * - `end` whenever the stream is finished, either because it was stopped, or due to an error.
  */
 class Logcat {
+  emulator: EmulatorControllerService;
+  offset: number;
+  lastline: string;
+  stream: any;
+  events: EventEmitter;
+  refreshRate: number;
+  timerID: NodeJS.Timeout | null;
+
+
   /**
    * Creates a logcat stream.
    *
@@ -40,7 +49,7 @@ class Logcat {
    * @param {object} uriOrEmulator
    * @param {object} auth
    */
-  constructor(uriOrEmulator, auth) {
+  constructor(uriOrEmulator: EmulatorControllerService | string, auth: typeof NopAuthenticator) {
     if (uriOrEmulator instanceof EmulatorControllerService) {
       this.emulator = uriOrEmulator;
     } else {
@@ -61,7 +70,7 @@ class Logcat {
    * @param  {Callback} fn Function to notify on the given event.
    * @memberof Logcat
    */
-  on = (name, fn) => {
+  on = (name: string, fn: (...args: any[]) => void) => {
     this.events.on(name, fn);
   };
 
@@ -72,7 +81,7 @@ class Logcat {
    * @param  {Callback} fn Function to notify on the given event.
    * @memberof Logcat
    */
-  off = (name, fn) => {
+  off = (name: string, fn: (...args: any[]) => void) => {
     this.events.off(name, fn);
   };
 
@@ -97,35 +106,35 @@ class Logcat {
     /* eslint-disable */
     const request = new proto.android.emulation.control.LogMessage();
     request.setStart(this.offset);
-    this.emulator.getLogcat(request, {}, (err, response) => {
+    this.emulator.getLogcat(request, {}, (err: Error | null, response: any) => {
       if (err) {
-        this.stop();
+      this.stop();
       }
       if (response) {
-        const nextOffset = response.getNext();
-        if (nextOffset > self.offset) {
-          self.offset = response.getNext();
-          self.events.emit("data", response.getContents());
-        }
+      const nextOffset: number = response.getNext();
+      if (nextOffset > this.offset) {
+        this.offset = response.getNext();
+        this.events.emit("data", response.getContents());
+      }
       }
     });
   };
 
   // Uses streaming, this really locks up the ui, so best not to use for now.
-  stream = () => {
+  startStream = () => {
     const self = this;
     /* eslint-disable */
     const request = new proto.android.emulation.control.LogMessage();
     request.setStart(this.offset);
     this.stream = this.emulator.streamLogcat(request);
-    this.stream.on("data", (response) => {
+    this.stream.on("data", (response: any) => {
       self.offset = response.getNext();
       const contents = response.getContents();
       self.events.emit("data", contents);
     });
-    this.stream.on("error", (error) => {
+    this.stream.on("error", (error: any) => {
       if ((error.code = 1)) {
-        // Ignore we got cancelled.
+      // Ignore we got cancelled.
       }
     });
   };
@@ -139,7 +148,7 @@ class Logcat {
    * @param  {number} refreshRate polling interval, or 0 if you wish to use streaming.
    * @memberof Logcat
    */
-  start = (fnNotify, refreshRate = 1000) => {
+  start = (fnNotify: (...args: any[]) => void, refreshRate = 1000) => {
     if (fnNotify) this.on("data", fnNotify);
 
     this.refreshRate = refreshRate;

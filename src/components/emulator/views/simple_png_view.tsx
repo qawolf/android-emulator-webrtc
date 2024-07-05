@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import * as Proto from "../../../proto/emulator_controller_pb";
+import { EmulatorControllerService } from "../../proto/emulator_web_client";
 
 const EmulatorPngView = ({
   emulator,
@@ -9,10 +10,17 @@ const EmulatorPngView = ({
   width,
   height,
   "data-testid": dataTestId,
+}: {
+  emulator: EmulatorControllerService,
+  onStateChange: (state: string) => void,
+  poll: boolean,
+  width: number,
+  height: number,
+  "data-testid": string,
 }) => {
   const [png, setPng] = useState("");
   const [connect, setConnect] = useState("connecting");
-  var screenShot = null;
+  var screenShot: any = null;
 
   useEffect(() => {
     startStream();
@@ -41,7 +49,7 @@ const EmulatorPngView = ({
     }
 
     if (poll && connect !== "disconnected") {
-      emulator.getScreenshot(request, {}, (err, response) => {
+      emulator.getScreenshot(request, {}, (err: any, response: any) => {
         setConnect("connected");
         setPng("data:image/jpeg;base64," + response.getImage_asB64());
         startStream();
@@ -49,12 +57,12 @@ const EmulatorPngView = ({
     } else {
       var receivedImage = false;
       screenShot = emulator.streamScreenshot(request);
-      screenShot.on("data", (response) => {
+      screenShot.on("data", (response: Proto.ImageResponse) => {
         receivedImage = true;
         setConnect("connected");
         setPng("data:image/jpeg;base64," + response.getImage_asB64());
       });
-      screenShot.on("error", (e) => {
+      screenShot.on("error", (e: any) => {
         console.warn("Screenshot stream broken", e);
         if (receivedImage) {
           setConnect("connecting");
@@ -66,14 +74,13 @@ const EmulatorPngView = ({
     }
   };
 
-  const preventDragHandler = (e) => {
+  const preventDragHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
 
   return (
     <div
-      width={width}
       style={{
         display: "block",
         position: "relative",
@@ -91,15 +98,6 @@ const EmulatorPngView = ({
       />
     </div>
   );
-};
-
-EmulatorPngView.propTypes = {
-  emulator: PropTypes.object,
-  onStateChange: PropTypes.func,
-  poll: PropTypes.bool,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  "data-testid": PropTypes.string,
 };
 
 export default EmulatorPngView;

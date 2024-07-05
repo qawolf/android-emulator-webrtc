@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
+import JsepProtocol from "./net/jsep_protocol_driver.js";
 
 const EmulatorWebrtcView = ({
   jsep,
@@ -23,9 +24,16 @@ const EmulatorWebrtcView = ({
   muted,
   volume,
   onError,
+}: {
+  jsep: JsepProtocol;
+  onStateChange: (state: string) => void;
+  onAudioStateChange: (state: boolean) => void;
+  muted: boolean;
+  volume: number;
+  onError: (error: any) => void;
 }) => {
   const [audio, setAudio] = useState(false);
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [connect, setConnect] = useState("connecting");
 
 
@@ -47,7 +55,7 @@ const EmulatorWebrtcView = ({
     setAudio(false);
   };
 
-  const onConnect = (track) => {
+  const onConnect = (track: MediaStreamTrack) => {
     setConnect("connected");
     const video = videoRef.current;
     if (!video) {
@@ -58,7 +66,7 @@ const EmulatorWebrtcView = ({
     if (!video.srcObject) {
       video.srcObject = new MediaStream();
     }
-    video.srcObject.addTrack(track);
+    (video.srcObject as MediaStream).addTrack(track);
     if (track.kind === "audio") {
       setAudio(true);
     }
@@ -88,7 +96,7 @@ const EmulatorWebrtcView = ({
     safePlay();
   };
 
-  const onContextMenu = (e) => {
+  const onContextMenu = (e: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
     e.preventDefault();
   };
 
@@ -115,27 +123,11 @@ const EmulatorWebrtcView = ({
         objectFit: "contain",
         objectPosition: "center",
       }}
-      volume={volume}
       muted={muted}
       onContextMenu={onContextMenu}
       onCanPlay={onCanPlay}
     />
   );
-};
-
-EmulatorWebrtcView.propTypes = {
-  jsep: PropTypes.object,
-  onStateChange: PropTypes.func,
-  onAudioStateChange: PropTypes.func,
-  muted: PropTypes.bool,
-  volume: PropTypes.number,
-  onError: PropTypes.func,
-};
-
-EmulatorWebrtcView.defaultProps = {
-  muted: true,
-  volume: 1.0,
-  onError: (e) => console.error("WebRTC error: " + e),
 };
 
 export default EmulatorWebrtcView;

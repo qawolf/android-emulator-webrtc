@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 import PropTypes from "prop-types";
-import React from "react";
+import React, {ReactNode} from "react";
 import * as Proto from "../../../proto/emulator_controller_pb";
 import EmulatorStatus from "../net/emulator_status";
+import JsepProtocol from "./net/jsep_protocol_driver.js";
+import { EmulatorControllerService } from "../../proto/emulator_web_client";
 
 /**
  * A handler that extends a view to send key/mouse events to the emulator.
@@ -28,10 +30,29 @@ import EmulatorStatus from "../net/emulator_status";
  *
  * You usually want to wrap a EmulatorRtcview, or EmulatorPngView in it.
  */
-export default function withMouseKeyHandler(WrappedComponent) {
+export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
   return class extends React.Component {
-    constructor(props) {
+    emulator: EmulatorControllerService;
+    jsep: JsepProtocol;
+    status: EmulatorStatus
+
+    props: { emulator: EmulatorControllerService; jsep: JsepProtocol };
+    state: {
+        deviceHeight: number;
+        deviceWidth: number;
+        mouse: {
+            xp: number;
+            yp: number;
+            mouseDown: boolean;
+            mouseButton: number;
+        };
+    }
+
+    handler: React.RefObject<HTMLDivElement>;
+
+    constructor(props: { emulator: EmulatorControllerService; jsep: JsepProtocol }) {
       super(props);
+      this.props = props;
       this.state = {
         deviceHeight: 1920,
         deviceWidth: 1080,
@@ -49,19 +70,12 @@ export default function withMouseKeyHandler(WrappedComponent) {
       this.status = new EmulatorStatus(emulator);
     }
 
-    static propTypes = {
-      /** The emulator object */
-      emulator: PropTypes.object.isRequired,
-      /** Jsep protocol driver, used to send mouse & touch events. */
-      jsep: PropTypes.object.isRequired,
-    };
-
     componentDidMount() {
       this.getScreenSize();
     }
 
     getScreenSize() {
-      this.status.updateStatus((state) => {
+      this.status.updateStatus((state: { hardwareConfig: { [key: string]: string } }) => {
         this.setState({
           deviceWidth: parseInt(state.hardwareConfig["hw.lcd.width"]) || 1080,
           deviceHeight: parseInt(state.hardwareConfig["hw.lcd.height"]) || 1920,
@@ -69,11 +83,11 @@ export default function withMouseKeyHandler(WrappedComponent) {
       });
     }
 
-    onContextMenu = (e) => {
+    onContextMenu = (e: React.MouseEvent) => {
       e.preventDefault();
     };
 
-    scaleCoordinates = (xp, yp) => {
+    scaleCoordinates = (xp: number, yp: number) => {
       // It is totally possible that we send clicks that are offscreen..
       const { deviceWidth, deviceHeight } = this.state;
       const { clientHeight, clientWidth } = this.handler.current;
@@ -101,7 +115,7 @@ export default function withMouseKeyHandler(WrappedComponent) {
       jsep.send("mouse", request);
     };
 
-    handleKey = (eventType) => {
+    handleKey = (eventType: "KEYDOWN" | "KEYUP" | "KEYPRESS") => {
       return (e) => {
         // Disable jumping to next control when pressing the space bar.
         if (e.keyCode === 32) {
@@ -122,39 +136,39 @@ export default function withMouseKeyHandler(WrappedComponent) {
     };
 
     // Properly handle the mouse events.
-    handleMouseDown = (e) => {
+    handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
       const { offsetX, offsetY } = e.nativeEvent;
       this.setState(
-        {
-          mouse: {
-            xp: offsetX,
-            yp: offsetY,
-            mouseDown: true,
-            // In browser's MouseEvent.button property,
-            // 0 stands for left button and 2 stands for right button.
-            mouseButton: e.button === 0 ? 1 : e.button === 2 ? 2 : 0,
-          },
+      {
+        mouse: {
+        xp: offsetX,
+        yp: offsetY,
+        mouseDown: true,
+        // In browser's MouseEvent.button property,
+        // 0 stands for left button and 2 stands for right button.
+        mouseButton: e.button === 0 ? 1 : e.button === 2 ? 2 : 0,
         },
-        this.setMouseCoordinates
+      },
+      this.setMouseCoordinates
       );
     };
 
-    handleMouseUp = (e) => {
+    handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
       const { offsetX, offsetY } = e.nativeEvent;
       this.setState(
-        {
-          mouse: { xp: offsetX, yp: offsetY, mouseDown: false, mouseButton: 0 },
-        },
-        this.setMouseCoordinates
+      {
+        mouse: { xp: offsetX, yp: offsetY, mouseDown: false, mouseButton: 0 },
+      },
+      this.setMouseCoordinates
       );
     };
 
-    handleMouseMove = (e) => {
+    handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
       // Let's not overload the endpoint with useless events.
       if (!this.state.mouse.mouseDown) return;
 
       const { offsetX, offsetY } = e.nativeEvent;
-      var mouse = this.state.mouse;
+      const mouse = this.state.mouse;
       mouse.xp = offsetX;
       mouse.yp = offsetY;
       this.setState({ mouse: mouse }, this.setMouseCoordinates);
@@ -167,7 +181,7 @@ export default function withMouseKeyHandler(WrappedComponent) {
      * @param {*} minIn The minimum value, the lower bound of the value param.
      * @param {*} maxIn The maximum value, the upper bound of the value param.
      */
-    scaleAxis = (value, minIn, maxIn) => {
+    scaleAxis = (value: number, minIn: number, maxIn: number) => {
       const minOut = 0x0; // EV_ABS_MIN
       const maxOut = 0x7fff; // EV_ABS_MAX
       const rangeOut = maxOut - minOut;
@@ -178,59 +192,59 @@ export default function withMouseKeyHandler(WrappedComponent) {
       return (((value - minIn) * rangeOut) / rangeIn + minOut) | 0;
     };
 
-    setTouchCoordinates = (type, touches, minForce, maxForce) => {
+    setTouchCoordinates = (type: string, touches: TouchList, minForce: number, maxForce: number) => {
       // We need to calculate the offset of the touch events.
-      const rect = this.handler.current.getBoundingClientRect();
+      const rect = this.handler.current!.getBoundingClientRect();
       const scaleCoordinates = this.scaleCoordinates;
       const touchesToSend = Object.keys(touches).map((index) => {
-        const touch = touches[index];
-        const { clientX, clientY, identifier, force, radiusX, radiusY } = touch;
-        const offsetX = clientX - rect.left;
-        const offsetY = clientY - rect.top;
-        const { x, y, scaleX, scaleY } = scaleCoordinates(offsetX, offsetY);
-        const scaledRadiusX = 2 * radiusX * scaleX;
-        const scaledRadiusY = 2 * radiusY * scaleY;
+      const touch = touches[index];
+      const { clientX, clientY, identifier, force, radiusX, radiusY } = touch;
+      const offsetX = clientX - rect.left;
+      const offsetY = clientY - rect.top;
+      const { x, y, scaleX, scaleY } = scaleCoordinates(offsetX, offsetY);
+      const scaledRadiusX = 2 * radiusX * (scaleX ?? 1);
+      const scaledRadiusY = 2 * radiusY * (scaleY ?? 1);
 
-        const protoTouch = new Proto.Touch();
-        protoTouch.setX(x | 0);
-        protoTouch.setY(y | 0);
-        protoTouch.setIdentifier(identifier);
+      const protoTouch: Proto.Touch = new Proto.Touch();
+      protoTouch.setX(x | 0);
+      protoTouch.setY(y | 0);
+      protoTouch.setIdentifier(identifier);
 
-        // Normalize the force
-        const MT_PRESSURE = this.scaleAxis(
-          Math.max(minForce, Math.min(maxForce, force)),
-          0,
-          1
-        );
-        protoTouch.setPressure(MT_PRESSURE);
-        protoTouch.setTouchMajor(Math.max(scaledRadiusX, scaledRadiusY) | 0);
-        protoTouch.setTouchMinor(Math.min(scaledRadiusX, scaledRadiusY) | 0);
+      // Normalize the force
+      const MT_PRESSURE: number = this.scaleAxis(
+        Math.max(minForce, Math.min(maxForce, force)),
+        0,
+        1
+      );
+      protoTouch.setPressure(MT_PRESSURE);
+      protoTouch.setTouchMajor(Math.max(scaledRadiusX, scaledRadiusY) | 0);
+      protoTouch.setTouchMinor(Math.min(scaledRadiusX, scaledRadiusY) | 0);
 
-        return protoTouch;
+      return protoTouch;
       });
 
       // Make the grpc call.
-      const requestTouchEvent = new Proto.TouchEvent();
+      const requestTouchEvent: Proto.TouchEvent = new Proto.TouchEvent();
       requestTouchEvent.setTouchesList(touchesToSend);
       const { jsep } = this.props;
       jsep.send("touch", requestTouchEvent);
     };
 
-    handleTouch = (minForce, maxForce) => {
-      return (e) => {
-        // Make sure they are not processed as mouse events later on.
-        // See https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
-        if (e.cancelable) {
-          e.preventDefault();
-        }
-        // Some browsers do net have a force sensor, so we have to "fake" values
-        // for start/move/end events.
-        this.setTouchCoordinates(
-          e.nativeEvent.type,
-          e.nativeEvent.changedTouches,
-          minForce,
-          maxForce
-        );
+    handleTouch = (minForce: number, maxForce: number) => {
+      return (e: React.TouchEvent<HTMLDivElement>) => {
+      // Make sure they are not processed as mouse events later on.
+      // See https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      // Some browsers do not have a force sensor, so we have to "fake" values
+      // for start/move/end events.
+      this.setTouchCoordinates(
+        e.nativeEvent.type,
+        e.nativeEvent.changedTouches,
+        minForce,
+        maxForce
+      );
       };
     };
 
@@ -248,7 +262,7 @@ export default function withMouseKeyHandler(WrappedComponent) {
           onKeyDown={this.handleKey("KEYDOWN")}
           onKeyUp={this.handleKey("KEYUP")}
           onDragStart={this.preventDragHandler}
-          tabIndex="0"
+          tabIndex={0}
           ref={this.handler}
           style={{
             pointerEvents: "all",

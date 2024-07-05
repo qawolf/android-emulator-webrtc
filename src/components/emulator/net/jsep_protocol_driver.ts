@@ -15,6 +15,7 @@
  */
 import { EventEmitter } from "events";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
+import { EmulatorControllerService, RtcService } from "../../../proto/emulator_web_client";
 /**
  * This drives the jsep protocol with the emulator, and can be used to
  * send key/mouse/touch events to the emulator. Events will be send
@@ -41,6 +42,24 @@ import { Empty } from "google-protobuf/google/protobuf/empty_pb";
  * @class JsepProtocol
  */
 export default class JsepProtocol {
+  emulator: EmulatorControllerService;
+  rtc: RtcService;
+  events: EventEmitter;
+  poll: boolean;
+  guid: string | null;
+  stream: any;
+  peerConnection?: RTCPeerConnection | null;
+  old_emu_patch: {
+    candidates: any[];
+    sdp: any;
+    haveOffer: boolean;
+    answer: boolean;
+  };
+  event_forwarders: any;
+  connected?: boolean;
+  active?: boolean;
+
+
   /**
    * Creates an instance of JsepProtocol.
    * @param {EmulatorService} emulator Service used to make the gRPC calls
@@ -50,7 +69,13 @@ export default class JsepProtocol {
    * @param {callback} onDisconnect optional callback that is invoked when the stream is closed.
    * @memberof JsepProtocol
    */
-  constructor(emulator, rtc, poll, onConnect, onDisconnect) {
+  constructor(
+    emulator: EmulatorControllerService,
+    rtc: RtcService,
+    poll: boolean,
+    onConnect: ((stream: any) => void) | undefined,
+    onDisconnect: ((stream: any) => void) | undefined
+  ) {
     this.emulator = emulator;
     this.rtc = rtc;
     this.events = new EventEmitter();
@@ -72,7 +97,7 @@ export default class JsepProtocol {
     if (onDisconnect) this.events.on("disconnected", onDisconnect);
   }
 
-  on = (name, fn) => {
+  on = (name: string, fn: (...args: any[]) => void) => {
     this.events.on(name, fn);
   };
 
@@ -115,7 +140,7 @@ export default class JsepProtocol {
       answer: false,
     };
     var request = new Empty();
-    this.rtc.requestRtcStream(request, {}, (err, response) => {
+    this.rtc.requestRtcStream(request, {}, (err: any, response: string) => {
       if (err) {
         console.error("Failed to configure rtc stream: " + JSON.stringify(err));
         this.disconnect();
@@ -153,11 +178,14 @@ export default class JsepProtocol {
     this.event_forwarders = {};
   };
 
-  _handlePeerConnectionTrack = (e) => {
+  _handlePeerConnectionTrack = (e: RTCTrackEvent) => {
     this.events.emit("connected", e.track);
   };
 
-  _handlePeerConnectionStateChange = (e) => {
+  _handlePeerConnectionStateChange = (e: Event) => {
+    if (!this.peerConnection) {
+      return;
+    }
     switch (this.peerConnection.connectionState) {
       case "disconnected":
       // At least one of the ICE transports for the connection is in the "disconnected" state
@@ -171,8 +199,8 @@ export default class JsepProtocol {
     }
   };
 
-  send(label, msg) {
-    let bytes = msg.serializeBinary();
+  send(label: string, msg: any) {
+    let bytes: Uint8Array = msg.serializeBinary();
     let forwarder = this.event_forwarders[label];
     console.log("Send " + label + " " + JSON.stringify(msg.toObject()));
     // Send via data channel/gRPC bridge.
@@ -194,17 +222,17 @@ export default class JsepProtocol {
     }
   }
 
-  _handlePeerIceCandidate = (e) => {
+  _handlePeerIceCandidate = (e: RTCPeerConnectionIceEvent) => {
     if (e.candidate === null) return;
     this._sendJsep({ candidate: e.candidate });
   };
 
-  _handleDataChannel = (e) => {
-    let channel = e.channel;
+  _handleDataChannel = (e: RTCDataChannelEvent) => {
+    let channel: RTCDataChannel = e.channel;
     this.event_forwarders[channel.label] = channel;
   };
 
-  _handleStart = (signal) => {
+  _handleStart = (signal: any) => {
     this.peerConnection = new RTCPeerConnection(signal.start);
     this.peerConnection.ontrack = this._handlePeerConnectionTrack;
     this.peerConnection.onicecandidate = this._handlePeerIceCandidate;
@@ -213,11 +241,11 @@ export default class JsepProtocol {
     this.peerConnection.onsignalingstatechange = this._handlePeerState;
   };
 
-  _handlePeerState = (event) => {
+  _handlePeerState = (event: Event) => {
     if (!this.peerConnection) {
       console.log("Peerconnection no longer available, ignoring signal state.");
     }
-    switch (this.peerConnection.signalingState) {
+    switch (this.peerConnection!.signalingState) {
       case "have-remote-offer":
         this.old_emu_patch.haveOffer = true;
         while (this.old_emu_patch.candidates.length > 0) {
@@ -227,17 +255,17 @@ export default class JsepProtocol {
     }
   };
 
-  _handleSDP = async (signal) => {
+  _handleSDP = async (signal: any) => {
     // We should not call this more than once..
     this.old_emu_patch.sdp = null;
-    this.peerConnection.setRemoteDescription(new RTCSessionDescription(signal));
-    const answer = await this.peerConnection.createAnswer();
+    this.peerConnection!.setRemoteDescription(new RTCSessionDescription(signal));
+    const answer: RTCSessionDescriptionInit | null = await this.peerConnection!.createAnswer();
     if (answer) {
       // Older emulators cannot handle multiple answers, so make sure we do not send one
       // again.
       if (!this.old_emu_patch.answer) {
         this.old_emu_patch.answer = true;
-        this.peerConnection.setLocalDescription(answer);
+        this.peerConnection!.setLocalDescription(answer);
         this._sendJsep({ sdp: answer });
       }
     } else {
@@ -245,11 +273,15 @@ export default class JsepProtocol {
     }
   };
 
-  _handleCandidate = (signal) => {
+  _handleCandidate = (signal: any) => {
+    if (!this.peerConnection) {
+      console.error("Received ICE candidate without peer connection.");
+      return;
+    }
     this.peerConnection.addIceCandidate(new RTCIceCandidate(signal));
   };
 
-  _handleSignal = (signal) => {
+  _handleSignal = (signal: any) => {
     if (signal.start) {
       this._handleStart(signal);
     }
@@ -278,9 +310,9 @@ export default class JsepProtocol {
     }
   };
 
-  _handleJsepMessage = (message) => {
+  _handleJsepMessage = (message: string) => {
     try {
-      const signal = JSON.parse(message);
+      const signal: any = JSON.parse(message);
       this._handleSignal(signal);
     } catch (e) {
       console.error(
@@ -298,9 +330,9 @@ export default class JsepProtocol {
     }
   };
 
-  _sendJsep = (jsonObject) => {
+  _sendJsep = (jsonObject: any): void => {
     /* eslint-disable */
-    var request = new proto.android.emulation.control.JsepMsg();
+    var request: proto.android.emulation.control.JsepMsg = new proto.android.emulation.control.JsepMsg();
     request.setId(this.guid);
     request.setMessage(JSON.stringify(jsonObject));
     this.rtc.sendJsepMessage(request);
@@ -311,21 +343,21 @@ export default class JsepProtocol {
     var self = this;
 
     this.stream = this.rtc.receiveJsepMessages(this.guid, {});
-    this.stream.on("data", (response) => {
-      const msg = response.getMessage();
+    this.stream.on("data", (response: any) => {
+      const msg: string = response.getMessage();
       self._handleJsepMessage(msg);
     });
-    this.stream.on("error", (e) => {
+    this.stream.on("error", (e: Error) => {
       console.log("Jsep message stream error:", e);
       if (self.connected) {
-        console.log("Attempting to reconnect to jsep message stream.");
-        self._streamJsepMessage();
+      console.log("Attempting to reconnect to jsep message stream.");
+      self._streamJsepMessage();
       }
     });
-    this.stream.on("end", (e) => {
+    this.stream.on("end", (e: any) => {
       if (self.connected) {
-        console.log("Stream end while still connected.. Reconnecting");
-        self._streamJsepMessage();
+      console.log("Stream end while still connected.. Reconnecting");
+      self._streamJsepMessage();
       }
     });
   };
@@ -338,26 +370,26 @@ export default class JsepProtocol {
 
     // This is a blocking call, that will return as soon as a series
     // of messages have been made available, or if we reach a timeout
-    this.rtc.receiveJsepMessage(this.guid, {}, (err, response) => {
+    this.rtc.receiveJsepMessage(this.guid, {}, (err: any, response: any) => {
       if (err) {
-        console.error(
-          "Failed to receive jsep message, disconnecting: " +
-            JSON.stringify(err)
-        );
-        this.disconnect();
+      console.error(
+        "Failed to receive jsep message, disconnecting: " +
+        JSON.stringify(err)
+      );
+      this.disconnect();
       }
-      const msg = response.getMessage();
+      const msg: string = response.getMessage();
       // Handle only if we received a useful message.
       // it is possible to get nothing if the server decides
       // to kick us out.
       if (msg) {
-        self._handleJsepMessage(response.getMessage());
+      self._handleJsepMessage(response.getMessage());
       }
 
       // And pump messages. Note we must continue the message pump as we
       // can receive new ICE candidates at any point in time.
       if (self.active) {
-        self._receiveJsepMessage();
+      self._receiveJsepMessage();
       }
     });
   };
