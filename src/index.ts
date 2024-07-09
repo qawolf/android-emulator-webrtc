@@ -16,5 +16,7 @@
 import Emulator from "./components/emulator/emulator";
 import Logcat from "./components/emulator/net/logcat";
 import EmulatorStatus from "./components/emulator/net/emulator_status";
+import JsepProtocol from "./components/emulator/net/jsep_protocol_driver";
+import { Authenticator, EmulatorControllerService, RtcService } from "./proto/emulator_web_client";
 
-export { Emulator, Logcat, EmulatorStatus };
+export { Emulator, Logcat, EmulatorStatus, JsepProtocol, RtcService, EmulatorControllerService, type Authenticator };
