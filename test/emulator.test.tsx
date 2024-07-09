@@ -1,4 +1,3 @@
-
 /**
  * @jest-environment jsdom
  */
@@ -33,7 +32,9 @@ jest.mock("../src/proto/emulator_web_client");
 // See https://github.com/testing-library/react-testing-library/issues/470
 // As well as https://github.com/facebook/react/issues/10389
 // All because of the "muted" tag on our video element inside webrtc_view
-const renderIgnoringUnstableFlushDiscreteUpdates = (component: React.ReactElement) => {
+const renderIgnoringUnstableFlushDiscreteUpdates = (
+  component: React.ReactElement,
+) => {
   // tslint:disable: no-console
   const originalError = console.error;
   const error = jest.fn();
@@ -42,7 +43,7 @@ const renderIgnoringUnstableFlushDiscreteUpdates = (component: React.ReactElemen
   expect(error).toHaveBeenCalledTimes(1);
   expect(error).toHaveBeenCalledWith(
     "Warning: unstable_flushDiscreteUpdates: Cannot flush updates when React is already rendering.%s",
-    expect.any(String)
+    expect.any(String),
   );
   console.error = originalError;
   // tslint:enable: no-console
@@ -57,9 +58,7 @@ describe("The emulator", () => {
   });
 
   test("Creates gRPC services", async () => {
-    render(
-      <Emulator uri="/test" width={300} height={300} />
-    );
+    render(<Emulator uri="/test" width={300} height={300} />);
 
     expect(EmulatorControllerService).toHaveBeenCalled();
     expect(RtcService).toHaveBeenCalled();
@@ -75,7 +74,7 @@ describe("The emulator", () => {
         onStateChange={(e) => {
           state = e;
         }}
-      />
+      />,
     );
 
     await waitFor(() => state === "connecting");
@@ -90,10 +89,11 @@ describe("The emulator", () => {
         width={300}
         height={300}
         gps={{ latitude: 47.6062, longitude: 122.3321 }}
-      />
+      />,
     );
 
-    const setGps = (EmulatorControllerService as jest.Mock).mock.instances[0].setGps;
+    const setGps = (EmulatorControllerService as jest.Mock).mock.instances[0]
+      .setGps;
     expect(setGps).toHaveBeenCalled();
 
     const location = new Proto.GpsState();
@@ -107,7 +107,7 @@ describe("The emulator", () => {
     (EmulatorControllerService as jest.Mock).mockImplementation(() => {
       return {
         streamScreenshot: jest.fn((request) => {
-            pngCall = true
+          pngCall = true;
           return { on: jest.fn(), cancel: jest.fn() };
         }),
         getStatus: jest.fn(() => {}),
@@ -115,6 +115,6 @@ describe("The emulator", () => {
     });
 
     render(<Emulator uri="/test" width={300} height={300} view="png" />);
-    expect(pngCall).toBeTruthy()
+    expect(pngCall).toBeTruthy();
   });
 });

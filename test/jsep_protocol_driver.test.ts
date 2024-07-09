@@ -39,18 +39,30 @@ const jsepMessage = (object: object, uid: string) => {
   return jsepMsg;
 };
 
-const requestRtcStream = jest.fn((request, metadata, callback: (err: Error | null, response: Rtc.RtcId) => void) => {
-  const guid = new Rtc.RtcId();
-  guid.setGuid("abcde");
+const requestRtcStream = jest.fn(
+  (
+    request,
+    metadata,
+    callback: (err: Error | null, response: Rtc.RtcId) => void,
+  ) => {
+    const guid = new Rtc.RtcId();
+    guid.setGuid("abcde");
 
-  callback(null, guid);
-});
+    callback(null, guid);
+  },
+);
 
 const receiveJsepMessage = (message: object) => {
   const jsepMsg = jsepMessage(message, "abcde");
-  return jest.fn((request, metadata, callback: (err: Error | null, response: Rtc.JsepMsg) => void) => {
-    callback(null, jsepMsg);
-  });
+  return jest.fn(
+    (
+      request,
+      metadata,
+      callback: (err: Error | null, response: Rtc.JsepMsg) => void,
+    ) => {
+      callback(null, jsepMsg);
+    },
+  );
 };
 
 const RTCPeerConnectionMock = jest.fn().mockImplementation((cfg) => ({
@@ -209,7 +221,9 @@ describe("Basic jsep protocol with polling.", () => {
     expect(jsep.peerConnection).not.toBeNull();
     expect(jsep.peerConnection!.currentRemoteDescription).not.toBeNull();
     // Peer connection was initialized with rtc config
-    expect((RTCPeerConnection as unknown as jest.Mock).mock.calls[0][0]).toStrictEqual({ foo: "bar" });
+    expect(
+      (RTCPeerConnection as unknown as jest.Mock).mock.calls[0][0],
+    ).toStrictEqual({ foo: "bar" });
   });
 
   it.skip("Never handles sdp twice / (async problem)", async () => {
@@ -222,7 +236,9 @@ describe("Basic jsep protocol with polling.", () => {
     expect(jsep.peerConnection).not.toBeNull();
     expect(jsep.peerConnection?.currentRemoteDescription?.sdp).toBe(sdp.sdp);
     // Peer connection was initialized with rtc config
-    expect((RTCPeerConnection as unknown as jest.Mock).mock.calls[0][0]).toStrictEqual({ foo: "bar" });
+    expect(
+      (RTCPeerConnection as unknown as jest.Mock).mock.calls[0][0],
+    ).toStrictEqual({ foo: "bar" });
     expect((rtc.sendJsepMessage as jest.Mock).mock.calls[0]).toBe(1);
   });
 });

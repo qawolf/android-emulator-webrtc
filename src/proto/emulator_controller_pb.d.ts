@@ -1,7 +1,6 @@
-import * as jspb from 'google-protobuf'
+import * as jspb from "google-protobuf";
 
-import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
-
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 
 export class VmRunState extends jspb.Message {
   getState(): VmRunState.RunState;
@@ -9,18 +8,27 @@ export class VmRunState extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): VmRunState.AsObject;
-  static toObject(includeInstance: boolean, msg: VmRunState): VmRunState.AsObject;
-  static serializeBinaryToWriter(message: VmRunState, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: VmRunState,
+  ): VmRunState.AsObject;
+  static serializeBinaryToWriter(
+    message: VmRunState,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): VmRunState;
-  static deserializeBinaryFromReader(message: VmRunState, reader: jspb.BinaryReader): VmRunState;
+  static deserializeBinaryFromReader(
+    message: VmRunState,
+    reader: jspb.BinaryReader,
+  ): VmRunState;
 }
 
 export namespace VmRunState {
   export type AsObject = {
-    state: VmRunState.RunState,
-  }
+    state: VmRunState.RunState;
+  };
 
-  export enum RunState { 
+  export enum RunState {
     UNKNOWN = 0,
     RUNNING = 1,
     RESTORE_VM = 2,
@@ -41,16 +49,25 @@ export class ParameterValue extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ParameterValue.AsObject;
-  static toObject(includeInstance: boolean, msg: ParameterValue): ParameterValue.AsObject;
-  static serializeBinaryToWriter(message: ParameterValue, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: ParameterValue,
+  ): ParameterValue.AsObject;
+  static serializeBinaryToWriter(
+    message: ParameterValue,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): ParameterValue;
-  static deserializeBinaryFromReader(message: ParameterValue, reader: jspb.BinaryReader): ParameterValue;
+  static deserializeBinaryFromReader(
+    message: ParameterValue,
+    reader: jspb.BinaryReader,
+  ): ParameterValue;
 }
 
 export namespace ParameterValue {
   export type AsObject = {
-    dataList: Array<number>,
-  }
+    dataList: Array<number>;
+  };
 }
 
 export class PhysicalModelValue extends jspb.Message {
@@ -67,27 +84,36 @@ export class PhysicalModelValue extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PhysicalModelValue.AsObject;
-  static toObject(includeInstance: boolean, msg: PhysicalModelValue): PhysicalModelValue.AsObject;
-  static serializeBinaryToWriter(message: PhysicalModelValue, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: PhysicalModelValue,
+  ): PhysicalModelValue.AsObject;
+  static serializeBinaryToWriter(
+    message: PhysicalModelValue,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): PhysicalModelValue;
-  static deserializeBinaryFromReader(message: PhysicalModelValue, reader: jspb.BinaryReader): PhysicalModelValue;
+  static deserializeBinaryFromReader(
+    message: PhysicalModelValue,
+    reader: jspb.BinaryReader,
+  ): PhysicalModelValue;
 }
 
 export namespace PhysicalModelValue {
   export type AsObject = {
-    target: PhysicalModelValue.PhysicalType,
-    status: PhysicalModelValue.State,
-    value?: ParameterValue.AsObject,
-  }
+    target: PhysicalModelValue.PhysicalType;
+    status: PhysicalModelValue.State;
+    value?: ParameterValue.AsObject;
+  };
 
-  export enum State { 
+  export enum State {
     OK = 0,
     NO_SERVICE = -3,
     DISABLED = -2,
     UNKNOWN = -1,
   }
 
-  export enum PhysicalType { 
+  export enum PhysicalType {
     POSITION = 0,
     ROTATION = 1,
     MAGNETIC_FIELD = 2,
@@ -125,27 +151,36 @@ export class SensorValue extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SensorValue.AsObject;
-  static toObject(includeInstance: boolean, msg: SensorValue): SensorValue.AsObject;
-  static serializeBinaryToWriter(message: SensorValue, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: SensorValue,
+  ): SensorValue.AsObject;
+  static serializeBinaryToWriter(
+    message: SensorValue,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): SensorValue;
-  static deserializeBinaryFromReader(message: SensorValue, reader: jspb.BinaryReader): SensorValue;
+  static deserializeBinaryFromReader(
+    message: SensorValue,
+    reader: jspb.BinaryReader,
+  ): SensorValue;
 }
 
 export namespace SensorValue {
   export type AsObject = {
-    target: SensorValue.SensorType,
-    status: SensorValue.State,
-    value?: ParameterValue.AsObject,
-  }
+    target: SensorValue.SensorType;
+    status: SensorValue.State;
+    value?: ParameterValue.AsObject;
+  };
 
-  export enum State { 
+  export enum State {
     OK = 0,
     NO_SERVICE = -3,
     DISABLED = -2,
     UNKNOWN = -1,
   }
 
-  export enum SensorType { 
+  export enum SensorType {
     ACCELERATION = 0,
     GYROSCOPE = 1,
     MAGNETIC_FIELD = 2,
@@ -172,19 +207,28 @@ export class BrightnessValue extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BrightnessValue.AsObject;
-  static toObject(includeInstance: boolean, msg: BrightnessValue): BrightnessValue.AsObject;
-  static serializeBinaryToWriter(message: BrightnessValue, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: BrightnessValue,
+  ): BrightnessValue.AsObject;
+  static serializeBinaryToWriter(
+    message: BrightnessValue,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): BrightnessValue;
-  static deserializeBinaryFromReader(message: BrightnessValue, reader: jspb.BinaryReader): BrightnessValue;
+  static deserializeBinaryFromReader(
+    message: BrightnessValue,
+    reader: jspb.BinaryReader,
+  ): BrightnessValue;
 }
 
 export namespace BrightnessValue {
   export type AsObject = {
-    target: BrightnessValue.LightType,
-    value: number,
-  }
+    target: BrightnessValue.LightType;
+    value: number;
+  };
 
-  export enum LightType { 
+  export enum LightType {
     LCD = 0,
     KEYBOARD = 1,
     BUTTON = 2,
@@ -197,16 +241,25 @@ export class DisplayMode extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DisplayMode.AsObject;
-  static toObject(includeInstance: boolean, msg: DisplayMode): DisplayMode.AsObject;
-  static serializeBinaryToWriter(message: DisplayMode, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: DisplayMode,
+  ): DisplayMode.AsObject;
+  static serializeBinaryToWriter(
+    message: DisplayMode,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): DisplayMode;
-  static deserializeBinaryFromReader(message: DisplayMode, reader: jspb.BinaryReader): DisplayMode;
+  static deserializeBinaryFromReader(
+    message: DisplayMode,
+    reader: jspb.BinaryReader,
+  ): DisplayMode;
 }
 
 export namespace DisplayMode {
   export type AsObject = {
-    value: DisplayModeValue,
-  }
+    value: DisplayModeValue;
+  };
 }
 
 export class LogMessage extends jspb.Message {
@@ -229,22 +282,31 @@ export class LogMessage extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): LogMessage.AsObject;
-  static toObject(includeInstance: boolean, msg: LogMessage): LogMessage.AsObject;
-  static serializeBinaryToWriter(message: LogMessage, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: LogMessage,
+  ): LogMessage.AsObject;
+  static serializeBinaryToWriter(
+    message: LogMessage,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): LogMessage;
-  static deserializeBinaryFromReader(message: LogMessage, reader: jspb.BinaryReader): LogMessage;
+  static deserializeBinaryFromReader(
+    message: LogMessage,
+    reader: jspb.BinaryReader,
+  ): LogMessage;
 }
 
 export namespace LogMessage {
   export type AsObject = {
-    contents: string,
-    start: number,
-    next: number,
-    sort: LogMessage.LogType,
-    entriesList: Array<LogcatEntry.AsObject>,
-  }
+    contents: string;
+    start: number;
+    next: number;
+    sort: LogMessage.LogType;
+    entriesList: Array<LogcatEntry.AsObject>;
+  };
 
-  export enum LogType { 
+  export enum LogType {
     TEXT = 0,
     PARSED = 1,
   }
@@ -271,23 +333,32 @@ export class LogcatEntry extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): LogcatEntry.AsObject;
-  static toObject(includeInstance: boolean, msg: LogcatEntry): LogcatEntry.AsObject;
-  static serializeBinaryToWriter(message: LogcatEntry, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: LogcatEntry,
+  ): LogcatEntry.AsObject;
+  static serializeBinaryToWriter(
+    message: LogcatEntry,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): LogcatEntry;
-  static deserializeBinaryFromReader(message: LogcatEntry, reader: jspb.BinaryReader): LogcatEntry;
+  static deserializeBinaryFromReader(
+    message: LogcatEntry,
+    reader: jspb.BinaryReader,
+  ): LogcatEntry;
 }
 
 export namespace LogcatEntry {
   export type AsObject = {
-    timestamp: number,
-    pid: number,
-    tid: number,
-    level: LogcatEntry.LogLevel,
-    tag: string,
-    msg: string,
-  }
+    timestamp: number;
+    pid: number;
+    tid: number;
+    level: LogcatEntry.LogLevel;
+    tag: string;
+    msg: string;
+  };
 
-  export enum LogLevel { 
+  export enum LogLevel {
     UNKNOWN = 0,
     DEFAULT = 1,
     VERBOSE = 2,
@@ -312,20 +383,29 @@ export class VmConfiguration extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): VmConfiguration.AsObject;
-  static toObject(includeInstance: boolean, msg: VmConfiguration): VmConfiguration.AsObject;
-  static serializeBinaryToWriter(message: VmConfiguration, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: VmConfiguration,
+  ): VmConfiguration.AsObject;
+  static serializeBinaryToWriter(
+    message: VmConfiguration,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): VmConfiguration;
-  static deserializeBinaryFromReader(message: VmConfiguration, reader: jspb.BinaryReader): VmConfiguration;
+  static deserializeBinaryFromReader(
+    message: VmConfiguration,
+    reader: jspb.BinaryReader,
+  ): VmConfiguration;
 }
 
 export namespace VmConfiguration {
   export type AsObject = {
-    hypervisortype: VmConfiguration.VmHypervisorType,
-    numberofcpucores: number,
-    ramsizebytes: number,
-  }
+    hypervisortype: VmConfiguration.VmHypervisorType;
+    numberofcpucores: number;
+    ramsizebytes: number;
+  };
 
-  export enum VmHypervisorType { 
+  export enum VmHypervisorType {
     UNKNOWN = 0,
     NONE = 1,
     KVM = 2,
@@ -343,15 +423,21 @@ export class ClipData extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ClipData.AsObject;
   static toObject(includeInstance: boolean, msg: ClipData): ClipData.AsObject;
-  static serializeBinaryToWriter(message: ClipData, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: ClipData,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): ClipData;
-  static deserializeBinaryFromReader(message: ClipData, reader: jspb.BinaryReader): ClipData;
+  static deserializeBinaryFromReader(
+    message: ClipData,
+    reader: jspb.BinaryReader,
+  ): ClipData;
 }
 
 export namespace ClipData {
   export type AsObject = {
-    text: string,
-  }
+    text: string;
+  };
 }
 
 export class Touch extends jspb.Message {
@@ -379,23 +465,29 @@ export class Touch extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Touch.AsObject;
   static toObject(includeInstance: boolean, msg: Touch): Touch.AsObject;
-  static serializeBinaryToWriter(message: Touch, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: Touch,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Touch;
-  static deserializeBinaryFromReader(message: Touch, reader: jspb.BinaryReader): Touch;
+  static deserializeBinaryFromReader(
+    message: Touch,
+    reader: jspb.BinaryReader,
+  ): Touch;
 }
 
 export namespace Touch {
   export type AsObject = {
-    x: number,
-    y: number,
-    identifier: number,
-    pressure: number,
-    touchMajor: number,
-    touchMinor: number,
-    expiration: Touch.EventExpiration,
-  }
+    x: number;
+    y: number;
+    identifier: number;
+    pressure: number;
+    touchMajor: number;
+    touchMinor: number;
+    expiration: Touch.EventExpiration;
+  };
 
-  export enum EventExpiration { 
+  export enum EventExpiration {
     EVENT_EXPIRATION_UNSPECIFIED = 0,
     NEVER_EXPIRE = 1,
   }
@@ -412,17 +504,26 @@ export class TouchEvent extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TouchEvent.AsObject;
-  static toObject(includeInstance: boolean, msg: TouchEvent): TouchEvent.AsObject;
-  static serializeBinaryToWriter(message: TouchEvent, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: TouchEvent,
+  ): TouchEvent.AsObject;
+  static serializeBinaryToWriter(
+    message: TouchEvent,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): TouchEvent;
-  static deserializeBinaryFromReader(message: TouchEvent, reader: jspb.BinaryReader): TouchEvent;
+  static deserializeBinaryFromReader(
+    message: TouchEvent,
+    reader: jspb.BinaryReader,
+  ): TouchEvent;
 }
 
 export namespace TouchEvent {
   export type AsObject = {
-    touchesList: Array<Touch.AsObject>,
-    display: number,
-  }
+    touchesList: Array<Touch.AsObject>;
+    display: number;
+  };
 }
 
 export class MouseEvent extends jspb.Message {
@@ -440,19 +541,28 @@ export class MouseEvent extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): MouseEvent.AsObject;
-  static toObject(includeInstance: boolean, msg: MouseEvent): MouseEvent.AsObject;
-  static serializeBinaryToWriter(message: MouseEvent, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: MouseEvent,
+  ): MouseEvent.AsObject;
+  static serializeBinaryToWriter(
+    message: MouseEvent,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): MouseEvent;
-  static deserializeBinaryFromReader(message: MouseEvent, reader: jspb.BinaryReader): MouseEvent;
+  static deserializeBinaryFromReader(
+    message: MouseEvent,
+    reader: jspb.BinaryReader,
+  ): MouseEvent;
 }
 
 export namespace MouseEvent {
   export type AsObject = {
-    x: number,
-    y: number,
-    buttons: number,
-    display: number,
-  }
+    x: number;
+    y: number;
+    buttons: number;
+    display: number;
+  };
 }
 
 export class WheelEvent extends jspb.Message {
@@ -467,18 +577,27 @@ export class WheelEvent extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): WheelEvent.AsObject;
-  static toObject(includeInstance: boolean, msg: WheelEvent): WheelEvent.AsObject;
-  static serializeBinaryToWriter(message: WheelEvent, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: WheelEvent,
+  ): WheelEvent.AsObject;
+  static serializeBinaryToWriter(
+    message: WheelEvent,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): WheelEvent;
-  static deserializeBinaryFromReader(message: WheelEvent, reader: jspb.BinaryReader): WheelEvent;
+  static deserializeBinaryFromReader(
+    message: WheelEvent,
+    reader: jspb.BinaryReader,
+  ): WheelEvent;
 }
 
 export namespace WheelEvent {
   export type AsObject = {
-    dx: number,
-    dy: number,
-    display: number,
-  }
+    dx: number;
+    dy: number;
+    display: number;
+  };
 }
 
 export class KeyboardEvent extends jspb.Message {
@@ -499,22 +618,31 @@ export class KeyboardEvent extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): KeyboardEvent.AsObject;
-  static toObject(includeInstance: boolean, msg: KeyboardEvent): KeyboardEvent.AsObject;
-  static serializeBinaryToWriter(message: KeyboardEvent, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: KeyboardEvent,
+  ): KeyboardEvent.AsObject;
+  static serializeBinaryToWriter(
+    message: KeyboardEvent,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): KeyboardEvent;
-  static deserializeBinaryFromReader(message: KeyboardEvent, reader: jspb.BinaryReader): KeyboardEvent;
+  static deserializeBinaryFromReader(
+    message: KeyboardEvent,
+    reader: jspb.BinaryReader,
+  ): KeyboardEvent;
 }
 
 export namespace KeyboardEvent {
   export type AsObject = {
-    codetype: KeyboardEvent.KeyCodeType,
-    eventtype: KeyboardEvent.KeyEventType,
-    keycode: number,
-    key: string,
-    text: string,
-  }
+    codetype: KeyboardEvent.KeyCodeType;
+    eventtype: KeyboardEvent.KeyEventType;
+    keycode: number;
+    key: string;
+    text: string;
+  };
 
-  export enum KeyCodeType { 
+  export enum KeyCodeType {
     USB = 0,
     EVDEV = 1,
     XKB = 2,
@@ -522,7 +650,7 @@ export namespace KeyboardEvent {
     MAC = 4,
   }
 
-  export enum KeyEventType { 
+  export enum KeyEventType {
     KEYDOWN = 0,
     KEYUP = 1,
     KEYPRESS = 2,
@@ -538,17 +666,26 @@ export class Fingerprint extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Fingerprint.AsObject;
-  static toObject(includeInstance: boolean, msg: Fingerprint): Fingerprint.AsObject;
-  static serializeBinaryToWriter(message: Fingerprint, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: Fingerprint,
+  ): Fingerprint.AsObject;
+  static serializeBinaryToWriter(
+    message: Fingerprint,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Fingerprint;
-  static deserializeBinaryFromReader(message: Fingerprint, reader: jspb.BinaryReader): Fingerprint;
+  static deserializeBinaryFromReader(
+    message: Fingerprint,
+    reader: jspb.BinaryReader,
+  ): Fingerprint;
 }
 
 export namespace Fingerprint {
   export type AsObject = {
-    istouching: boolean,
-    touchid: number,
-  }
+    istouching: boolean;
+    touchid: number;
+  };
 }
 
 export class GpsState extends jspb.Message {
@@ -576,21 +713,27 @@ export class GpsState extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GpsState.AsObject;
   static toObject(includeInstance: boolean, msg: GpsState): GpsState.AsObject;
-  static serializeBinaryToWriter(message: GpsState, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: GpsState,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): GpsState;
-  static deserializeBinaryFromReader(message: GpsState, reader: jspb.BinaryReader): GpsState;
+  static deserializeBinaryFromReader(
+    message: GpsState,
+    reader: jspb.BinaryReader,
+  ): GpsState;
 }
 
 export namespace GpsState {
   export type AsObject = {
-    passiveupdate: boolean,
-    latitude: number,
-    longitude: number,
-    speed: number,
-    bearing: number,
-    altitude: number,
-    satellites: number,
-  }
+    passiveupdate: boolean;
+    latitude: number;
+    longitude: number;
+    speed: number;
+    bearing: number;
+    altitude: number;
+    satellites: number;
+  };
 }
 
 export class BatteryState extends jspb.Message {
@@ -614,23 +757,32 @@ export class BatteryState extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BatteryState.AsObject;
-  static toObject(includeInstance: boolean, msg: BatteryState): BatteryState.AsObject;
-  static serializeBinaryToWriter(message: BatteryState, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: BatteryState,
+  ): BatteryState.AsObject;
+  static serializeBinaryToWriter(
+    message: BatteryState,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): BatteryState;
-  static deserializeBinaryFromReader(message: BatteryState, reader: jspb.BinaryReader): BatteryState;
+  static deserializeBinaryFromReader(
+    message: BatteryState,
+    reader: jspb.BinaryReader,
+  ): BatteryState;
 }
 
 export namespace BatteryState {
   export type AsObject = {
-    hasbattery: boolean,
-    ispresent: boolean,
-    charger: BatteryState.BatteryCharger,
-    chargelevel: number,
-    health: BatteryState.BatteryHealth,
-    status: BatteryState.BatteryStatus,
-  }
+    hasbattery: boolean;
+    ispresent: boolean;
+    charger: BatteryState.BatteryCharger;
+    chargelevel: number;
+    health: BatteryState.BatteryHealth;
+    status: BatteryState.BatteryStatus;
+  };
 
-  export enum BatteryStatus { 
+  export enum BatteryStatus {
     UNKNOWN = 0,
     CHARGING = 1,
     DISCHARGING = 2,
@@ -638,14 +790,14 @@ export namespace BatteryState {
     FULL = 4,
   }
 
-  export enum BatteryCharger { 
+  export enum BatteryCharger {
     NONE = 0,
     AC = 1,
     USB = 2,
     WIRELESS = 3,
   }
 
-  export enum BatteryHealth { 
+  export enum BatteryHealth {
     GOOD = 0,
     FAILED = 1,
     DEAD = 2,
@@ -663,19 +815,28 @@ export class ImageTransport extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ImageTransport.AsObject;
-  static toObject(includeInstance: boolean, msg: ImageTransport): ImageTransport.AsObject;
-  static serializeBinaryToWriter(message: ImageTransport, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: ImageTransport,
+  ): ImageTransport.AsObject;
+  static serializeBinaryToWriter(
+    message: ImageTransport,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): ImageTransport;
-  static deserializeBinaryFromReader(message: ImageTransport, reader: jspb.BinaryReader): ImageTransport;
+  static deserializeBinaryFromReader(
+    message: ImageTransport,
+    reader: jspb.BinaryReader,
+  ): ImageTransport;
 }
 
 export namespace ImageTransport {
   export type AsObject = {
-    channel: ImageTransport.TransportChannel,
-    handle: string,
-  }
+    channel: ImageTransport.TransportChannel;
+    handle: string;
+  };
 
-  export enum TransportChannel { 
+  export enum TransportChannel {
     TRANSPORT_CHANNEL_UNSPECIFIED = 0,
     MMAP = 1,
   }
@@ -696,19 +857,28 @@ export class FoldedDisplay extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): FoldedDisplay.AsObject;
-  static toObject(includeInstance: boolean, msg: FoldedDisplay): FoldedDisplay.AsObject;
-  static serializeBinaryToWriter(message: FoldedDisplay, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: FoldedDisplay,
+  ): FoldedDisplay.AsObject;
+  static serializeBinaryToWriter(
+    message: FoldedDisplay,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): FoldedDisplay;
-  static deserializeBinaryFromReader(message: FoldedDisplay, reader: jspb.BinaryReader): FoldedDisplay;
+  static deserializeBinaryFromReader(
+    message: FoldedDisplay,
+    reader: jspb.BinaryReader,
+  ): FoldedDisplay;
 }
 
 export namespace FoldedDisplay {
   export type AsObject = {
-    width: number,
-    height: number,
-    xoffset: number,
-    yoffset: number,
-  }
+    width: number;
+    height: number;
+    xoffset: number;
+    yoffset: number;
+  };
 }
 
 export class ImageFormat extends jspb.Message {
@@ -744,25 +914,34 @@ export class ImageFormat extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ImageFormat.AsObject;
-  static toObject(includeInstance: boolean, msg: ImageFormat): ImageFormat.AsObject;
-  static serializeBinaryToWriter(message: ImageFormat, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: ImageFormat,
+  ): ImageFormat.AsObject;
+  static serializeBinaryToWriter(
+    message: ImageFormat,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): ImageFormat;
-  static deserializeBinaryFromReader(message: ImageFormat, reader: jspb.BinaryReader): ImageFormat;
+  static deserializeBinaryFromReader(
+    message: ImageFormat,
+    reader: jspb.BinaryReader,
+  ): ImageFormat;
 }
 
 export namespace ImageFormat {
   export type AsObject = {
-    format: ImageFormat.ImgFormat,
-    rotation?: Rotation.AsObject,
-    width: number,
-    height: number,
-    display: number,
-    transport?: ImageTransport.AsObject,
-    foldeddisplay?: FoldedDisplay.AsObject,
-    displaymode: DisplayModeValue,
-  }
+    format: ImageFormat.ImgFormat;
+    rotation?: Rotation.AsObject;
+    width: number;
+    height: number;
+    display: number;
+    transport?: ImageTransport.AsObject;
+    foldeddisplay?: FoldedDisplay.AsObject;
+    displaymode: DisplayModeValue;
+  };
 
-  export enum ImgFormat { 
+  export enum ImgFormat {
     PNG = 0,
     RGBA8888 = 1,
     RGB888 = 2,
@@ -795,20 +974,26 @@ export class Image extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Image.AsObject;
   static toObject(includeInstance: boolean, msg: Image): Image.AsObject;
-  static serializeBinaryToWriter(message: Image, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: Image,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Image;
-  static deserializeBinaryFromReader(message: Image, reader: jspb.BinaryReader): Image;
+  static deserializeBinaryFromReader(
+    message: Image,
+    reader: jspb.BinaryReader,
+  ): Image;
 }
 
 export namespace Image {
   export type AsObject = {
-    format?: ImageFormat.AsObject,
-    width: number,
-    height: number,
-    image: Uint8Array | string,
-    seq: number,
-    timestampus: number,
-  }
+    format?: ImageFormat.AsObject;
+    width: number;
+    height: number;
+    image: Uint8Array | string;
+    seq: number;
+    timestampus: number;
+  };
 }
 
 export class Rotation extends jspb.Message {
@@ -827,20 +1012,26 @@ export class Rotation extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Rotation.AsObject;
   static toObject(includeInstance: boolean, msg: Rotation): Rotation.AsObject;
-  static serializeBinaryToWriter(message: Rotation, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: Rotation,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Rotation;
-  static deserializeBinaryFromReader(message: Rotation, reader: jspb.BinaryReader): Rotation;
+  static deserializeBinaryFromReader(
+    message: Rotation,
+    reader: jspb.BinaryReader,
+  ): Rotation;
 }
 
 export namespace Rotation {
   export type AsObject = {
-    rotation: Rotation.SkinRotation,
-    xaxis: number,
-    yaxis: number,
-    zaxis: number,
-  }
+    rotation: Rotation.SkinRotation;
+    xaxis: number;
+    yaxis: number;
+    zaxis: number;
+  };
 
-  export enum SkinRotation { 
+  export enum SkinRotation {
     PORTRAIT = 0,
     LANDSCAPE = 1,
     REVERSE_PORTRAIT = 2,
@@ -858,18 +1049,24 @@ export class PhoneCall extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PhoneCall.AsObject;
   static toObject(includeInstance: boolean, msg: PhoneCall): PhoneCall.AsObject;
-  static serializeBinaryToWriter(message: PhoneCall, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: PhoneCall,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): PhoneCall;
-  static deserializeBinaryFromReader(message: PhoneCall, reader: jspb.BinaryReader): PhoneCall;
+  static deserializeBinaryFromReader(
+    message: PhoneCall,
+    reader: jspb.BinaryReader,
+  ): PhoneCall;
 }
 
 export namespace PhoneCall {
   export type AsObject = {
-    operation: PhoneCall.Operation,
-    number: string,
-  }
+    operation: PhoneCall.Operation;
+    number: string;
+  };
 
-  export enum Operation { 
+  export enum Operation {
     INITCALL = 0,
     ACCEPTCALL = 1,
     REJECTCALLEXPLICIT = 2,
@@ -886,18 +1083,27 @@ export class PhoneResponse extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PhoneResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: PhoneResponse): PhoneResponse.AsObject;
-  static serializeBinaryToWriter(message: PhoneResponse, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: PhoneResponse,
+  ): PhoneResponse.AsObject;
+  static serializeBinaryToWriter(
+    message: PhoneResponse,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): PhoneResponse;
-  static deserializeBinaryFromReader(message: PhoneResponse, reader: jspb.BinaryReader): PhoneResponse;
+  static deserializeBinaryFromReader(
+    message: PhoneResponse,
+    reader: jspb.BinaryReader,
+  ): PhoneResponse;
 }
 
 export namespace PhoneResponse {
   export type AsObject = {
-    response: PhoneResponse.Response,
-  }
+    response: PhoneResponse.Response;
+  };
 
-  export enum Response { 
+  export enum Response {
     OK = 0,
     BADOPERATION = 1,
     BADNUMBER = 2,
@@ -917,16 +1123,22 @@ export class Entry extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Entry.AsObject;
   static toObject(includeInstance: boolean, msg: Entry): Entry.AsObject;
-  static serializeBinaryToWriter(message: Entry, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: Entry,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Entry;
-  static deserializeBinaryFromReader(message: Entry, reader: jspb.BinaryReader): Entry;
+  static deserializeBinaryFromReader(
+    message: Entry,
+    reader: jspb.BinaryReader,
+  ): Entry;
 }
 
 export namespace Entry {
   export type AsObject = {
-    key: string,
-    value: string,
-  }
+    key: string;
+    value: string;
+  };
 }
 
 export class EntryList extends jspb.Message {
@@ -938,15 +1150,21 @@ export class EntryList extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EntryList.AsObject;
   static toObject(includeInstance: boolean, msg: EntryList): EntryList.AsObject;
-  static serializeBinaryToWriter(message: EntryList, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: EntryList,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): EntryList;
-  static deserializeBinaryFromReader(message: EntryList, reader: jspb.BinaryReader): EntryList;
+  static deserializeBinaryFromReader(
+    message: EntryList,
+    reader: jspb.BinaryReader,
+  ): EntryList;
 }
 
 export namespace EntryList {
   export type AsObject = {
-    entryList: Array<Entry.AsObject>,
-  }
+    entryList: Array<Entry.AsObject>;
+  };
 }
 
 export class EmulatorStatus extends jspb.Message {
@@ -971,20 +1189,29 @@ export class EmulatorStatus extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EmulatorStatus.AsObject;
-  static toObject(includeInstance: boolean, msg: EmulatorStatus): EmulatorStatus.AsObject;
-  static serializeBinaryToWriter(message: EmulatorStatus, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: EmulatorStatus,
+  ): EmulatorStatus.AsObject;
+  static serializeBinaryToWriter(
+    message: EmulatorStatus,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): EmulatorStatus;
-  static deserializeBinaryFromReader(message: EmulatorStatus, reader: jspb.BinaryReader): EmulatorStatus;
+  static deserializeBinaryFromReader(
+    message: EmulatorStatus,
+    reader: jspb.BinaryReader,
+  ): EmulatorStatus;
 }
 
 export namespace EmulatorStatus {
   export type AsObject = {
-    version: string,
-    uptime: number,
-    booted: boolean,
-    vmconfig?: VmConfiguration.AsObject,
-    hardwareconfig?: EntryList.AsObject,
-  }
+    version: string;
+    uptime: number;
+    booted: boolean;
+    vmconfig?: VmConfiguration.AsObject;
+    hardwareconfig?: EntryList.AsObject;
+  };
 }
 
 export class AudioFormat extends jspb.Message {
@@ -1002,31 +1229,40 @@ export class AudioFormat extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AudioFormat.AsObject;
-  static toObject(includeInstance: boolean, msg: AudioFormat): AudioFormat.AsObject;
-  static serializeBinaryToWriter(message: AudioFormat, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: AudioFormat,
+  ): AudioFormat.AsObject;
+  static serializeBinaryToWriter(
+    message: AudioFormat,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): AudioFormat;
-  static deserializeBinaryFromReader(message: AudioFormat, reader: jspb.BinaryReader): AudioFormat;
+  static deserializeBinaryFromReader(
+    message: AudioFormat,
+    reader: jspb.BinaryReader,
+  ): AudioFormat;
 }
 
 export namespace AudioFormat {
   export type AsObject = {
-    samplingrate: number,
-    channels: AudioFormat.Channels,
-    format: AudioFormat.SampleFormat,
-    mode: AudioFormat.DeliveryMode,
-  }
+    samplingrate: number;
+    channels: AudioFormat.Channels;
+    format: AudioFormat.SampleFormat;
+    mode: AudioFormat.DeliveryMode;
+  };
 
-  export enum SampleFormat { 
+  export enum SampleFormat {
     AUD_FMT_U8 = 0,
     AUD_FMT_S16 = 1,
   }
 
-  export enum Channels { 
+  export enum Channels {
     MONO = 0,
     STEREO = 1,
   }
 
-  export enum DeliveryMode { 
+  export enum DeliveryMode {
     MODE_UNSPECIFIED = 0,
     MODE_REAL_TIME = 1,
   }
@@ -1048,18 +1284,27 @@ export class AudioPacket extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AudioPacket.AsObject;
-  static toObject(includeInstance: boolean, msg: AudioPacket): AudioPacket.AsObject;
-  static serializeBinaryToWriter(message: AudioPacket, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: AudioPacket,
+  ): AudioPacket.AsObject;
+  static serializeBinaryToWriter(
+    message: AudioPacket,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): AudioPacket;
-  static deserializeBinaryFromReader(message: AudioPacket, reader: jspb.BinaryReader): AudioPacket;
+  static deserializeBinaryFromReader(
+    message: AudioPacket,
+    reader: jspb.BinaryReader,
+  ): AudioPacket;
 }
 
 export namespace AudioPacket {
   export type AsObject = {
-    format?: AudioFormat.AsObject,
-    timestamp: number,
-    audio: Uint8Array | string,
-  }
+    format?: AudioFormat.AsObject;
+    timestamp: number;
+    audio: Uint8Array | string;
+  };
 }
 
 export class SmsMessage extends jspb.Message {
@@ -1071,17 +1316,26 @@ export class SmsMessage extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SmsMessage.AsObject;
-  static toObject(includeInstance: boolean, msg: SmsMessage): SmsMessage.AsObject;
-  static serializeBinaryToWriter(message: SmsMessage, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: SmsMessage,
+  ): SmsMessage.AsObject;
+  static serializeBinaryToWriter(
+    message: SmsMessage,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): SmsMessage;
-  static deserializeBinaryFromReader(message: SmsMessage, reader: jspb.BinaryReader): SmsMessage;
+  static deserializeBinaryFromReader(
+    message: SmsMessage,
+    reader: jspb.BinaryReader,
+  ): SmsMessage;
 }
 
 export namespace SmsMessage {
   export type AsObject = {
-    srcaddress: string,
-    text: string,
-  }
+    srcaddress: string;
+    text: string;
+  };
 }
 
 export class DisplayConfiguration extends jspb.Message {
@@ -1102,22 +1356,31 @@ export class DisplayConfiguration extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DisplayConfiguration.AsObject;
-  static toObject(includeInstance: boolean, msg: DisplayConfiguration): DisplayConfiguration.AsObject;
-  static serializeBinaryToWriter(message: DisplayConfiguration, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: DisplayConfiguration,
+  ): DisplayConfiguration.AsObject;
+  static serializeBinaryToWriter(
+    message: DisplayConfiguration,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): DisplayConfiguration;
-  static deserializeBinaryFromReader(message: DisplayConfiguration, reader: jspb.BinaryReader): DisplayConfiguration;
+  static deserializeBinaryFromReader(
+    message: DisplayConfiguration,
+    reader: jspb.BinaryReader,
+  ): DisplayConfiguration;
 }
 
 export namespace DisplayConfiguration {
   export type AsObject = {
-    width: number,
-    height: number,
-    dpi: number,
-    flags: number,
-    display: number,
-  }
+    width: number;
+    height: number;
+    dpi: number;
+    flags: number;
+    display: number;
+  };
 
-  export enum DisplayFlags { 
+  export enum DisplayFlags {
     DISPLAYFLAGS_UNSPECIFIED = 0,
     VIRTUAL_DISPLAY_FLAG_PUBLIC = 1,
     VIRTUAL_DISPLAY_FLAG_PRESENTATION = 2,
@@ -1131,7 +1394,10 @@ export class DisplayConfigurations extends jspb.Message {
   getDisplaysList(): Array<DisplayConfiguration>;
   setDisplaysList(value: Array<DisplayConfiguration>): DisplayConfigurations;
   clearDisplaysList(): DisplayConfigurations;
-  addDisplays(value?: DisplayConfiguration, index?: number): DisplayConfiguration;
+  addDisplays(
+    value?: DisplayConfiguration,
+    index?: number,
+  ): DisplayConfiguration;
 
   getUserconfigurable(): number;
   setUserconfigurable(value: number): DisplayConfigurations;
@@ -1141,18 +1407,27 @@ export class DisplayConfigurations extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): DisplayConfigurations.AsObject;
-  static toObject(includeInstance: boolean, msg: DisplayConfigurations): DisplayConfigurations.AsObject;
-  static serializeBinaryToWriter(message: DisplayConfigurations, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: DisplayConfigurations,
+  ): DisplayConfigurations.AsObject;
+  static serializeBinaryToWriter(
+    message: DisplayConfigurations,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): DisplayConfigurations;
-  static deserializeBinaryFromReader(message: DisplayConfigurations, reader: jspb.BinaryReader): DisplayConfigurations;
+  static deserializeBinaryFromReader(
+    message: DisplayConfigurations,
+    reader: jspb.BinaryReader,
+  ): DisplayConfigurations;
 }
 
 export namespace DisplayConfigurations {
   export type AsObject = {
-    displaysList: Array<DisplayConfiguration.AsObject>,
-    userconfigurable: number,
-    maxdisplays: number,
-  }
+    displaysList: Array<DisplayConfiguration.AsObject>;
+    userconfigurable: number;
+    maxdisplays: number;
+  };
 }
 
 export class Notification extends jspb.Message {
@@ -1164,8 +1439,12 @@ export class Notification extends jspb.Message {
   hasCameranotification(): boolean;
   clearCameranotification(): Notification;
 
-  getDisplayconfigurationschangednotification(): DisplayConfigurationsChangedNotification | undefined;
-  setDisplayconfigurationschangednotification(value?: DisplayConfigurationsChangedNotification): Notification;
+  getDisplayconfigurationschangednotification():
+    | DisplayConfigurationsChangedNotification
+    | undefined;
+  setDisplayconfigurationschangednotification(
+    value?: DisplayConfigurationsChangedNotification,
+  ): Notification;
   hasDisplayconfigurationschangednotification(): boolean;
   clearDisplayconfigurationschangednotification(): Notification;
 
@@ -1173,26 +1452,35 @@ export class Notification extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Notification.AsObject;
-  static toObject(includeInstance: boolean, msg: Notification): Notification.AsObject;
-  static serializeBinaryToWriter(message: Notification, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: Notification,
+  ): Notification.AsObject;
+  static serializeBinaryToWriter(
+    message: Notification,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Notification;
-  static deserializeBinaryFromReader(message: Notification, reader: jspb.BinaryReader): Notification;
+  static deserializeBinaryFromReader(
+    message: Notification,
+    reader: jspb.BinaryReader,
+  ): Notification;
 }
 
 export namespace Notification {
   export type AsObject = {
-    event: Notification.EventType,
-    cameranotification?: CameraNotification.AsObject,
-    displayconfigurationschangednotification?: DisplayConfigurationsChangedNotification.AsObject,
-  }
+    event: Notification.EventType;
+    cameranotification?: CameraNotification.AsObject;
+    displayconfigurationschangednotification?: DisplayConfigurationsChangedNotification.AsObject;
+  };
 
-  export enum EventType { 
+  export enum EventType {
     VIRTUAL_SCENE_CAMERA_INACTIVE = 0,
     VIRTUAL_SCENE_CAMERA_ACTIVE = 1,
     DISPLAY_CONFIGURATIONS_CHANGED_UI = 2,
   }
 
-  export enum TypeCase { 
+  export enum TypeCase {
     TYPE_NOT_SET = 0,
     CAMERANOTIFICATION = 2,
     DISPLAYCONFIGURATIONSCHANGEDNOTIFICATION = 3,
@@ -1208,37 +1496,61 @@ export class CameraNotification extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CameraNotification.AsObject;
-  static toObject(includeInstance: boolean, msg: CameraNotification): CameraNotification.AsObject;
-  static serializeBinaryToWriter(message: CameraNotification, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: CameraNotification,
+  ): CameraNotification.AsObject;
+  static serializeBinaryToWriter(
+    message: CameraNotification,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): CameraNotification;
-  static deserializeBinaryFromReader(message: CameraNotification, reader: jspb.BinaryReader): CameraNotification;
+  static deserializeBinaryFromReader(
+    message: CameraNotification,
+    reader: jspb.BinaryReader,
+  ): CameraNotification;
 }
 
 export namespace CameraNotification {
   export type AsObject = {
-    active: boolean,
-    display: number,
-  }
+    active: boolean;
+    display: number;
+  };
 }
 
 export class DisplayConfigurationsChangedNotification extends jspb.Message {
   getDisplayconfigurations(): DisplayConfigurations | undefined;
-  setDisplayconfigurations(value?: DisplayConfigurations): DisplayConfigurationsChangedNotification;
+  setDisplayconfigurations(
+    value?: DisplayConfigurations,
+  ): DisplayConfigurationsChangedNotification;
   hasDisplayconfigurations(): boolean;
   clearDisplayconfigurations(): DisplayConfigurationsChangedNotification;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): DisplayConfigurationsChangedNotification.AsObject;
-  static toObject(includeInstance: boolean, msg: DisplayConfigurationsChangedNotification): DisplayConfigurationsChangedNotification.AsObject;
-  static serializeBinaryToWriter(message: DisplayConfigurationsChangedNotification, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): DisplayConfigurationsChangedNotification;
-  static deserializeBinaryFromReader(message: DisplayConfigurationsChangedNotification, reader: jspb.BinaryReader): DisplayConfigurationsChangedNotification;
+  toObject(
+    includeInstance?: boolean,
+  ): DisplayConfigurationsChangedNotification.AsObject;
+  static toObject(
+    includeInstance: boolean,
+    msg: DisplayConfigurationsChangedNotification,
+  ): DisplayConfigurationsChangedNotification.AsObject;
+  static serializeBinaryToWriter(
+    message: DisplayConfigurationsChangedNotification,
+    writer: jspb.BinaryWriter,
+  ): void;
+  static deserializeBinary(
+    bytes: Uint8Array,
+  ): DisplayConfigurationsChangedNotification;
+  static deserializeBinaryFromReader(
+    message: DisplayConfigurationsChangedNotification,
+    reader: jspb.BinaryReader,
+  ): DisplayConfigurationsChangedNotification;
 }
 
 export namespace DisplayConfigurationsChangedNotification {
   export type AsObject = {
-    displayconfigurations?: DisplayConfigurations.AsObject,
-  }
+    displayconfigurations?: DisplayConfigurations.AsObject;
+  };
 }
 
 export class RotationRadian extends jspb.Message {
@@ -1253,18 +1565,27 @@ export class RotationRadian extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RotationRadian.AsObject;
-  static toObject(includeInstance: boolean, msg: RotationRadian): RotationRadian.AsObject;
-  static serializeBinaryToWriter(message: RotationRadian, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: RotationRadian,
+  ): RotationRadian.AsObject;
+  static serializeBinaryToWriter(
+    message: RotationRadian,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): RotationRadian;
-  static deserializeBinaryFromReader(message: RotationRadian, reader: jspb.BinaryReader): RotationRadian;
+  static deserializeBinaryFromReader(
+    message: RotationRadian,
+    reader: jspb.BinaryReader,
+  ): RotationRadian;
 }
 
 export namespace RotationRadian {
   export type AsObject = {
-    x: number,
-    y: number,
-    z: number,
-  }
+    x: number;
+    y: number;
+    z: number;
+  };
 }
 
 export class Velocity extends jspb.Message {
@@ -1280,17 +1601,23 @@ export class Velocity extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Velocity.AsObject;
   static toObject(includeInstance: boolean, msg: Velocity): Velocity.AsObject;
-  static serializeBinaryToWriter(message: Velocity, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: Velocity,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Velocity;
-  static deserializeBinaryFromReader(message: Velocity, reader: jspb.BinaryReader): Velocity;
+  static deserializeBinaryFromReader(
+    message: Velocity,
+    reader: jspb.BinaryReader,
+  ): Velocity;
 }
 
 export namespace Velocity {
   export type AsObject = {
-    x: number,
-    y: number,
-    z: number,
-  }
+    x: number;
+    y: number;
+    z: number;
+  };
 }
 
 export class Posture extends jspb.Message {
@@ -1300,17 +1627,23 @@ export class Posture extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Posture.AsObject;
   static toObject(includeInstance: boolean, msg: Posture): Posture.AsObject;
-  static serializeBinaryToWriter(message: Posture, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: Posture,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): Posture;
-  static deserializeBinaryFromReader(message: Posture, reader: jspb.BinaryReader): Posture;
+  static deserializeBinaryFromReader(
+    message: Posture,
+    reader: jspb.BinaryReader,
+  ): Posture;
 }
 
 export namespace Posture {
   export type AsObject = {
-    value: Posture.PostureValue,
-  }
+    value: Posture.PostureValue;
+  };
 
-  export enum PostureValue { 
+  export enum PostureValue {
     POSTURE_UNKNOWN = 0,
     POSTURE_CLOSED = 1,
     POSTURE_HALF_OPENED = 2,
@@ -1327,19 +1660,28 @@ export class PhoneNumber extends jspb.Message {
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PhoneNumber.AsObject;
-  static toObject(includeInstance: boolean, msg: PhoneNumber): PhoneNumber.AsObject;
-  static serializeBinaryToWriter(message: PhoneNumber, writer: jspb.BinaryWriter): void;
+  static toObject(
+    includeInstance: boolean,
+    msg: PhoneNumber,
+  ): PhoneNumber.AsObject;
+  static serializeBinaryToWriter(
+    message: PhoneNumber,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): PhoneNumber;
-  static deserializeBinaryFromReader(message: PhoneNumber, reader: jspb.BinaryReader): PhoneNumber;
+  static deserializeBinaryFromReader(
+    message: PhoneNumber,
+    reader: jspb.BinaryReader,
+  ): PhoneNumber;
 }
 
 export namespace PhoneNumber {
   export type AsObject = {
-    number: string,
-  }
+    number: string;
+  };
 }
 
-export enum DisplayModeValue { 
+export enum DisplayModeValue {
   PHONE = 0,
   FOLDABLE = 1,
   TABLET = 2,

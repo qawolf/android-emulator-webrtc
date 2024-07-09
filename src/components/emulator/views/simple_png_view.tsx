@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import * as Proto from "../../../proto/emulator_controller_pb";
-import {EmulatorControllerService} from "../../../proto/emulator_web_client";
+import { EmulatorControllerService } from "../../../proto/emulator_web_client";
 import * as emulator_controller_pb from "../../../proto/emulator_controller_pb";
 
 const EmulatorPngView = ({
@@ -11,12 +11,12 @@ const EmulatorPngView = ({
   width,
   height,
 }: {
-  emulator: EmulatorControllerService,
-  onStateChange?: (state: string) => void,
-  poll?: boolean,
-  width?: number,
-  height?: number,
-}) =>  {
+  emulator: EmulatorControllerService;
+  onStateChange?: (state: string) => void;
+  poll?: boolean;
+  width?: number;
+  height?: number;
+}) => {
   const [png, setPng] = useState("");
   const [connect, setConnect] = useState("connecting");
   let screenShot: any = null;
@@ -76,7 +76,6 @@ const EmulatorPngView = ({
   const preventDragHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
-
 
   return (
     <div

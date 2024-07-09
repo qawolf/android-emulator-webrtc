@@ -18,23 +18,24 @@ import React from "react";
 import * as Proto from "../../../proto/emulator_controller_pb";
 import EmulatorStatus from "../net/emulator_status";
 import JsepProtocol from "../net/jsep_protocol_driver.js";
-import {EmulatorControllerService} from "../../../proto/emulator_web_client";
-import {EmulatorStatus as EmulatorStatusProto} from "../../../proto/emulator_controller_pb";
+import { EmulatorControllerService } from "../../../proto/emulator_web_client";
+import { EmulatorStatus as EmulatorStatusProto } from "../../../proto/emulator_controller_pb";
 import EmulatorWebrtcView from "./webrtc_view";
 import EmulatorPngView from "./simple_png_view";
 
-type MouseKeyHandlerProps = ({
-  emulator: EmulatorControllerService;
-  jsep: JsepProtocol;
-}& React.ComponentProps<typeof EmulatorWebrtcView>)
-    | ({
-  emulator: EmulatorControllerService;
-  jsep: JsepProtocol;
-}& React.ComponentProps<typeof EmulatorPngView>)
-    | {
-  emulator: EmulatorControllerService;
-  jsep: JsepProtocol;
-};
+type MouseKeyHandlerProps =
+  | ({
+      emulator: EmulatorControllerService;
+      jsep: JsepProtocol;
+    } & React.ComponentProps<typeof EmulatorWebrtcView>)
+  | ({
+      emulator: EmulatorControllerService;
+      jsep: JsepProtocol;
+    } & React.ComponentProps<typeof EmulatorPngView>)
+  | {
+      emulator: EmulatorControllerService;
+      jsep: JsepProtocol;
+    };
 
 /**
  * A handler that extends a view to send key/mouse events to the emulator.
@@ -50,19 +51,19 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
   return class extends React.Component {
     emulator: EmulatorControllerService;
     jsep: JsepProtocol;
-    status: EmulatorStatus
+    status: EmulatorStatus;
 
-    props: MouseKeyHandlerProps
+    props: MouseKeyHandlerProps;
     state: {
-        deviceHeight: number;
-        deviceWidth: number;
-        mouse: {
-            xp: number;
-            yp: number;
-            mouseDown: boolean;
-            mouseButton: number;
-        };
-    }
+      deviceHeight: number;
+      deviceWidth: number;
+      mouse: {
+        xp: number;
+        yp: number;
+        mouseDown: boolean;
+        mouseButton: number;
+      };
+    };
 
     handler: React.RefObject<HTMLDivElement>;
 
@@ -90,7 +91,7 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
 
     preventDragHandler(e: React.DragEvent<HTMLDivElement>) {
       e.preventDefault();
-    };
+    }
 
     componentDidMount() {
       this.getScreenSize();
@@ -109,19 +110,22 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
           if (entry.key === "hw.lcd.height") {
             newState.deviceHeight = parseInt(entry.value);
           }
-        })
+        });
         this.setState(newState);
-      }, false)
-    };
+      }, false);
+    }
 
     onContextMenu(e: React.MouseEvent) {
       e.preventDefault();
-    };
+    }
 
     scaleCoordinates(xp: number, yp: number) {
       // It is totally possible that we send clicks that are offscreen..
       const { deviceWidth, deviceHeight } = this.state;
-      const { clientHeight, clientWidth } = this.handler.current ?? {clientHeight: undefined, clientWidth: undefined};
+      const { clientHeight, clientWidth } = this.handler.current ?? {
+        clientHeight: undefined,
+        clientWidth: undefined,
+      };
       const scaleX = deviceWidth / (clientWidth ?? 1);
       const scaleY = deviceHeight / (clientHeight ?? 1);
       const x = Math.round(xp * scaleX);
@@ -132,7 +136,7 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
         return { x: -1, y: -1 };
       }
       return { x: x, y: y, scaleX: scaleX, scaleY: scaleY };
-    };
+    }
 
     setMouseCoordinates() {
       // Forward the request to the jsep engine.
@@ -144,7 +148,7 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
       request.setButtons(mouseDown ? mouseButton : 0);
       const { jsep } = this.props;
       jsep.send("mouse", request);
-    };
+    }
 
     handleKey(eventType: "KEYDOWN" | "KEYUP" | "KEYPRESS") {
       return (e: React.KeyboardEvent) => {
@@ -157,42 +161,42 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
           eventType === "KEYDOWN"
             ? Proto.KeyboardEvent.KeyEventType.KEYDOWN
             : eventType === "KEYUP"
-            ? Proto.KeyboardEvent.KeyEventType.KEYUP
-            : Proto.KeyboardEvent.KeyEventType.KEYPRESS
+              ? Proto.KeyboardEvent.KeyEventType.KEYUP
+              : Proto.KeyboardEvent.KeyEventType.KEYPRESS,
         );
         request.setKey(e.key);
         const { jsep } = this.props;
         jsep.send("keyboard", request);
       };
-    };
+    }
 
     // Properly handle the mouse events.
     handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
       const { offsetX, offsetY } = e.nativeEvent;
       this.setState(
-      {
-        mouse: {
-        xp: offsetX,
-        yp: offsetY,
-        mouseDown: true,
-        // In browser's MouseEvent.button property,
-        // 0 stands for left button and 2 stands for right button.
-        mouseButton: e.button === 0 ? 1 : e.button === 2 ? 2 : 0,
+        {
+          mouse: {
+            xp: offsetX,
+            yp: offsetY,
+            mouseDown: true,
+            // In browser's MouseEvent.button property,
+            // 0 stands for left button and 2 stands for right button.
+            mouseButton: e.button === 0 ? 1 : e.button === 2 ? 2 : 0,
+          },
         },
-      },
-      this.setMouseCoordinates
+        this.setMouseCoordinates,
       );
-    };
+    }
 
     handleMouseUp(e: React.MouseEvent<HTMLDivElement>) {
       const { offsetX, offsetY } = e.nativeEvent;
       this.setState(
-      {
-        mouse: { xp: offsetX, yp: offsetY, mouseDown: false, mouseButton: 0 },
-      },
-      this.setMouseCoordinates
+        {
+          mouse: { xp: offsetX, yp: offsetY, mouseDown: false, mouseButton: 0 },
+        },
+        this.setMouseCoordinates,
       );
-    };
+    }
 
     handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
       // Let's not overload the endpoint with useless events.
@@ -203,7 +207,7 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
       mouse.xp = offsetX;
       mouse.yp = offsetY;
       this.setState({ mouse: mouse }, this.setMouseCoordinates);
-    };
+    }
 
     /**
      * Scales an axis to linux input codes that the emulator understands.
@@ -221,9 +225,14 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
         return minOut + rangeOut / 2;
       }
       return (((value - minIn) * rangeOut) / rangeIn + minOut) | 0;
-    };
+    }
 
-    setTouchCoordinates(type: string, touches: TouchList, minForce: number, maxForce: number) {
+    setTouchCoordinates(
+      type: string,
+      touches: TouchList,
+      minForce: number,
+      maxForce: number,
+    ) {
       // We need to calculate the offset of the touch events.
       const rect = this.handler.current!.getBoundingClientRect();
       const scaleCoordinates = this.scaleCoordinates;
@@ -247,9 +256,9 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
 
         // Normalize the force
         const MT_PRESSURE: number = this.scaleAxis(
-            Math.max(minForce, Math.min(maxForce, force)),
-            0,
-            1
+          Math.max(minForce, Math.min(maxForce, force)),
+          0,
+          1,
         );
         protoTouch.setPressure(MT_PRESSURE);
         protoTouch.setTouchMajor(Math.max(scaledRadiusX, scaledRadiusY) | 0);
@@ -263,25 +272,25 @@ export default function withMouseKeyHandler(WrappedComponent: any) {
       requestTouchEvent.setTouchesList(touchesToSend);
       const { jsep } = this.props;
       jsep.send("touch", requestTouchEvent);
-    };
+    }
 
     handleTouch(minForce: number, maxForce: number) {
       return (e: React.TouchEvent<HTMLDivElement>) => {
-      // Make sure they are not processed as mouse events later on.
-      // See https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
-      if (e.cancelable) {
-        e.preventDefault();
-      }
-      // Some browsers do not have a force sensor, so we have to "fake" values
-      // for start/move/end events.
-      this.setTouchCoordinates(
-        e.nativeEvent.type,
-        e.nativeEvent.changedTouches,
-        minForce,
-        maxForce
-      );
+        // Make sure they are not processed as mouse events later on.
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+        if (e.cancelable) {
+          e.preventDefault();
+        }
+        // Some browsers do not have a force sensor, so we have to "fake" values
+        // for start/move/end events.
+        this.setTouchCoordinates(
+          e.nativeEvent.type,
+          e.nativeEvent.changedTouches,
+          minForce,
+          maxForce,
+        );
       };
-    };
+    }
 
     render() {
       return (

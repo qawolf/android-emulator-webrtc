@@ -10,1522 +10,1806 @@
 // 	protoc              v4.23.1
 // source: emulator_controller.proto
 
-
 /* eslint-disable */
 // @ts-nocheck
 
+import * as grpcWeb from "grpc-web";
 
-import * as grpcWeb from 'grpc-web';
-
-import * as emulator_controller_pb from './emulator_controller_pb';
-import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
-
+import * as emulator_controller_pb from "./emulator_controller_pb";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 
 export class EmulatorControllerClient {
   client_: grpcWeb.AbstractClientBase;
   hostname_: string;
-  credentials_: null | { [index: string]: string; };
-  options_: null | { [index: string]: any; };
+  credentials_: null | { [index: string]: string };
+  options_: null | { [index: string]: any };
 
-  constructor (hostname: string,
-               credentials?: null | { [index: string]: string; },
-               options?: null | { [index: string]: any; }) {
+  constructor(
+    hostname: string,
+    credentials?: null | { [index: string]: string },
+    options?: null | { [index: string]: any },
+  ) {
     if (!options) options = {};
     if (!credentials) credentials = {};
-    options['format'] = 'text';
+    options["format"] = "text";
 
     this.client_ = new grpcWeb.GrpcWebClientBase(options);
-    this.hostname_ = hostname.replace(/\/+$/, '');
+    this.hostname_ = hostname.replace(/\/+$/, "");
     this.credentials_ = credentials;
     this.options_ = options;
   }
 
   methodDescriptorstreamSensor = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/streamSensor',
+    "/android.emulation.control.EmulatorController/streamSensor",
     grpcWeb.MethodType.SERVER_STREAMING,
     emulator_controller_pb.SensorValue,
     emulator_controller_pb.SensorValue,
     (request: emulator_controller_pb.SensorValue) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.SensorValue.deserializeBinary
+    emulator_controller_pb.SensorValue.deserializeBinary,
   );
 
   streamSensor(
     request: emulator_controller_pb.SensorValue,
-    metadata?: grpcWeb.Metadata): grpcWeb.ClientReadableStream<emulator_controller_pb.SensorValue> {
+    metadata?: grpcWeb.Metadata,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.SensorValue> {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/android.emulation.control.EmulatorController/streamSensor',
+        "/android.emulation.control.EmulatorController/streamSensor",
       request,
       metadata || {},
-      this.methodDescriptorstreamSensor);
+      this.methodDescriptorstreamSensor,
+    );
   }
 
   methodDescriptorgetSensor = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getSensor',
+    "/android.emulation.control.EmulatorController/getSensor",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.SensorValue,
     emulator_controller_pb.SensorValue,
     (request: emulator_controller_pb.SensorValue) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.SensorValue.deserializeBinary
+    emulator_controller_pb.SensorValue.deserializeBinary,
   );
 
   getSensor(
     request: emulator_controller_pb.SensorValue,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.SensorValue>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.SensorValue>;
 
   getSensor(
     request: emulator_controller_pb.SensorValue,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.SensorValue) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.SensorValue>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.SensorValue,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.SensorValue>;
 
   getSensor(
     request: emulator_controller_pb.SensorValue,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.SensorValue) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.SensorValue,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getSensor',
+          "/android.emulation.control.EmulatorController/getSensor",
         request,
         metadata || {},
         this.methodDescriptorgetSensor,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getSensor',
-    request,
-    metadata || {},
-    this.methodDescriptorgetSensor);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getSensor",
+      request,
+      metadata || {},
+      this.methodDescriptorgetSensor,
+    );
   }
 
   methodDescriptorsetSensor = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setSensor',
+    "/android.emulation.control.EmulatorController/setSensor",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.SensorValue,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.SensorValue) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setSensor(
     request: emulator_controller_pb.SensorValue,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setSensor(
     request: emulator_controller_pb.SensorValue,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setSensor(
     request: emulator_controller_pb.SensorValue,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setSensor',
+          "/android.emulation.control.EmulatorController/setSensor",
         request,
         metadata || {},
         this.methodDescriptorsetSensor,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setSensor',
-    request,
-    metadata || {},
-    this.methodDescriptorsetSensor);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setSensor",
+      request,
+      metadata || {},
+      this.methodDescriptorsetSensor,
+    );
   }
 
   methodDescriptorsetPhysicalModel = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setPhysicalModel',
+    "/android.emulation.control.EmulatorController/setPhysicalModel",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.PhysicalModelValue,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.PhysicalModelValue) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setPhysicalModel(
     request: emulator_controller_pb.PhysicalModelValue,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setPhysicalModel(
     request: emulator_controller_pb.PhysicalModelValue,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setPhysicalModel(
     request: emulator_controller_pb.PhysicalModelValue,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setPhysicalModel',
+          "/android.emulation.control.EmulatorController/setPhysicalModel",
         request,
         metadata || {},
         this.methodDescriptorsetPhysicalModel,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setPhysicalModel',
-    request,
-    metadata || {},
-    this.methodDescriptorsetPhysicalModel);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setPhysicalModel",
+      request,
+      metadata || {},
+      this.methodDescriptorsetPhysicalModel,
+    );
   }
 
   methodDescriptorgetPhysicalModel = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getPhysicalModel',
+    "/android.emulation.control.EmulatorController/getPhysicalModel",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.PhysicalModelValue,
     emulator_controller_pb.PhysicalModelValue,
     (request: emulator_controller_pb.PhysicalModelValue) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.PhysicalModelValue.deserializeBinary
+    emulator_controller_pb.PhysicalModelValue.deserializeBinary,
   );
 
   getPhysicalModel(
     request: emulator_controller_pb.PhysicalModelValue,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.PhysicalModelValue>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.PhysicalModelValue>;
 
   getPhysicalModel(
     request: emulator_controller_pb.PhysicalModelValue,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhysicalModelValue) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.PhysicalModelValue>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhysicalModelValue,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.PhysicalModelValue>;
 
   getPhysicalModel(
     request: emulator_controller_pb.PhysicalModelValue,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhysicalModelValue) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhysicalModelValue,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getPhysicalModel',
+          "/android.emulation.control.EmulatorController/getPhysicalModel",
         request,
         metadata || {},
         this.methodDescriptorgetPhysicalModel,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getPhysicalModel',
-    request,
-    metadata || {},
-    this.methodDescriptorgetPhysicalModel);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getPhysicalModel",
+      request,
+      metadata || {},
+      this.methodDescriptorgetPhysicalModel,
+    );
   }
 
   methodDescriptorstreamPhysicalModel = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/streamPhysicalModel',
+    "/android.emulation.control.EmulatorController/streamPhysicalModel",
     grpcWeb.MethodType.SERVER_STREAMING,
     emulator_controller_pb.PhysicalModelValue,
     emulator_controller_pb.PhysicalModelValue,
     (request: emulator_controller_pb.PhysicalModelValue) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.PhysicalModelValue.deserializeBinary
+    emulator_controller_pb.PhysicalModelValue.deserializeBinary,
   );
 
   streamPhysicalModel(
     request: emulator_controller_pb.PhysicalModelValue,
-    metadata?: grpcWeb.Metadata): grpcWeb.ClientReadableStream<emulator_controller_pb.PhysicalModelValue> {
+    metadata?: grpcWeb.Metadata,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.PhysicalModelValue> {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/android.emulation.control.EmulatorController/streamPhysicalModel',
+        "/android.emulation.control.EmulatorController/streamPhysicalModel",
       request,
       metadata || {},
-      this.methodDescriptorstreamPhysicalModel);
+      this.methodDescriptorstreamPhysicalModel,
+    );
   }
 
   methodDescriptorsetClipboard = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setClipboard',
+    "/android.emulation.control.EmulatorController/setClipboard",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.ClipData,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.ClipData) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setClipboard(
     request: emulator_controller_pb.ClipData,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setClipboard(
     request: emulator_controller_pb.ClipData,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setClipboard(
     request: emulator_controller_pb.ClipData,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setClipboard',
+          "/android.emulation.control.EmulatorController/setClipboard",
         request,
         metadata || {},
         this.methodDescriptorsetClipboard,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setClipboard',
-    request,
-    metadata || {},
-    this.methodDescriptorsetClipboard);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setClipboard",
+      request,
+      metadata || {},
+      this.methodDescriptorsetClipboard,
+    );
   }
 
   methodDescriptorgetClipboard = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getClipboard',
+    "/android.emulation.control.EmulatorController/getClipboard",
     grpcWeb.MethodType.UNARY,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.ClipData,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.ClipData.deserializeBinary
+    emulator_controller_pb.ClipData.deserializeBinary,
   );
 
   getClipboard(
     request: google_protobuf_empty_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.ClipData>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.ClipData>;
 
   getClipboard(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.ClipData) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.ClipData>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.ClipData,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.ClipData>;
 
   getClipboard(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.ClipData) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.ClipData,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getClipboard',
+          "/android.emulation.control.EmulatorController/getClipboard",
         request,
         metadata || {},
         this.methodDescriptorgetClipboard,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getClipboard',
-    request,
-    metadata || {},
-    this.methodDescriptorgetClipboard);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getClipboard",
+      request,
+      metadata || {},
+      this.methodDescriptorgetClipboard,
+    );
   }
 
   methodDescriptorstreamClipboard = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/streamClipboard',
+    "/android.emulation.control.EmulatorController/streamClipboard",
     grpcWeb.MethodType.SERVER_STREAMING,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.ClipData,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.ClipData.deserializeBinary
+    emulator_controller_pb.ClipData.deserializeBinary,
   );
 
   streamClipboard(
     request: google_protobuf_empty_pb.Empty,
-    metadata?: grpcWeb.Metadata): grpcWeb.ClientReadableStream<emulator_controller_pb.ClipData> {
+    metadata?: grpcWeb.Metadata,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.ClipData> {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/android.emulation.control.EmulatorController/streamClipboard',
+        "/android.emulation.control.EmulatorController/streamClipboard",
       request,
       metadata || {},
-      this.methodDescriptorstreamClipboard);
+      this.methodDescriptorstreamClipboard,
+    );
   }
 
   methodDescriptorsetBattery = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setBattery',
+    "/android.emulation.control.EmulatorController/setBattery",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.BatteryState,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.BatteryState) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setBattery(
     request: emulator_controller_pb.BatteryState,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setBattery(
     request: emulator_controller_pb.BatteryState,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setBattery(
     request: emulator_controller_pb.BatteryState,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setBattery',
+          "/android.emulation.control.EmulatorController/setBattery",
         request,
         metadata || {},
         this.methodDescriptorsetBattery,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setBattery',
-    request,
-    metadata || {},
-    this.methodDescriptorsetBattery);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setBattery",
+      request,
+      metadata || {},
+      this.methodDescriptorsetBattery,
+    );
   }
 
   methodDescriptorgetBattery = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getBattery',
+    "/android.emulation.control.EmulatorController/getBattery",
     grpcWeb.MethodType.UNARY,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.BatteryState,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.BatteryState.deserializeBinary
+    emulator_controller_pb.BatteryState.deserializeBinary,
   );
 
   getBattery(
     request: google_protobuf_empty_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.BatteryState>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.BatteryState>;
 
   getBattery(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.BatteryState) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.BatteryState>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.BatteryState,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.BatteryState>;
 
   getBattery(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.BatteryState) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.BatteryState,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getBattery',
+          "/android.emulation.control.EmulatorController/getBattery",
         request,
         metadata || {},
         this.methodDescriptorgetBattery,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getBattery',
-    request,
-    metadata || {},
-    this.methodDescriptorgetBattery);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getBattery",
+      request,
+      metadata || {},
+      this.methodDescriptorgetBattery,
+    );
   }
 
   methodDescriptorsetGps = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setGps',
+    "/android.emulation.control.EmulatorController/setGps",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.GpsState,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.GpsState) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setGps(
     request: emulator_controller_pb.GpsState,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setGps(
     request: emulator_controller_pb.GpsState,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setGps(
     request: emulator_controller_pb.GpsState,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
-        this.hostname_ +
-          '/android.emulation.control.EmulatorController/setGps',
+        this.hostname_ + "/android.emulation.control.EmulatorController/setGps",
         request,
         metadata || {},
         this.methodDescriptorsetGps,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setGps',
-    request,
-    metadata || {},
-    this.methodDescriptorsetGps);
+      this.hostname_ + "/android.emulation.control.EmulatorController/setGps",
+      request,
+      metadata || {},
+      this.methodDescriptorsetGps,
+    );
   }
 
   methodDescriptorgetGps = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getGps',
+    "/android.emulation.control.EmulatorController/getGps",
     grpcWeb.MethodType.UNARY,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.GpsState,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.GpsState.deserializeBinary
+    emulator_controller_pb.GpsState.deserializeBinary,
   );
 
   getGps(
     request: google_protobuf_empty_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.GpsState>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.GpsState>;
 
   getGps(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.GpsState) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.GpsState>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.GpsState,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.GpsState>;
 
   getGps(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.GpsState) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.GpsState,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
-        this.hostname_ +
-          '/android.emulation.control.EmulatorController/getGps',
+        this.hostname_ + "/android.emulation.control.EmulatorController/getGps",
         request,
         metadata || {},
         this.methodDescriptorgetGps,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getGps',
-    request,
-    metadata || {},
-    this.methodDescriptorgetGps);
+      this.hostname_ + "/android.emulation.control.EmulatorController/getGps",
+      request,
+      metadata || {},
+      this.methodDescriptorgetGps,
+    );
   }
 
   methodDescriptorsendFingerprint = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/sendFingerprint',
+    "/android.emulation.control.EmulatorController/sendFingerprint",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.Fingerprint,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.Fingerprint) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   sendFingerprint(
     request: emulator_controller_pb.Fingerprint,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   sendFingerprint(
     request: emulator_controller_pb.Fingerprint,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   sendFingerprint(
     request: emulator_controller_pb.Fingerprint,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/sendFingerprint',
+          "/android.emulation.control.EmulatorController/sendFingerprint",
         request,
         metadata || {},
         this.methodDescriptorsendFingerprint,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/sendFingerprint',
-    request,
-    metadata || {},
-    this.methodDescriptorsendFingerprint);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/sendFingerprint",
+      request,
+      metadata || {},
+      this.methodDescriptorsendFingerprint,
+    );
   }
 
   methodDescriptorsendKey = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/sendKey',
+    "/android.emulation.control.EmulatorController/sendKey",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.KeyboardEvent,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.KeyboardEvent) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   sendKey(
     request: emulator_controller_pb.KeyboardEvent,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   sendKey(
     request: emulator_controller_pb.KeyboardEvent,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   sendKey(
     request: emulator_controller_pb.KeyboardEvent,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/sendKey',
+          "/android.emulation.control.EmulatorController/sendKey",
         request,
         metadata || {},
         this.methodDescriptorsendKey,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/sendKey',
-    request,
-    metadata || {},
-    this.methodDescriptorsendKey);
+      this.hostname_ + "/android.emulation.control.EmulatorController/sendKey",
+      request,
+      metadata || {},
+      this.methodDescriptorsendKey,
+    );
   }
 
   methodDescriptorsendTouch = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/sendTouch',
+    "/android.emulation.control.EmulatorController/sendTouch",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.TouchEvent,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.TouchEvent) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   sendTouch(
     request: emulator_controller_pb.TouchEvent,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   sendTouch(
     request: emulator_controller_pb.TouchEvent,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   sendTouch(
     request: emulator_controller_pb.TouchEvent,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/sendTouch',
+          "/android.emulation.control.EmulatorController/sendTouch",
         request,
         metadata || {},
         this.methodDescriptorsendTouch,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/sendTouch',
-    request,
-    metadata || {},
-    this.methodDescriptorsendTouch);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/sendTouch",
+      request,
+      metadata || {},
+      this.methodDescriptorsendTouch,
+    );
   }
 
   methodDescriptorsendMouse = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/sendMouse',
+    "/android.emulation.control.EmulatorController/sendMouse",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.MouseEvent,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.MouseEvent) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   sendMouse(
     request: emulator_controller_pb.MouseEvent,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   sendMouse(
     request: emulator_controller_pb.MouseEvent,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   sendMouse(
     request: emulator_controller_pb.MouseEvent,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/sendMouse',
+          "/android.emulation.control.EmulatorController/sendMouse",
         request,
         metadata || {},
         this.methodDescriptorsendMouse,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/sendMouse',
-    request,
-    metadata || {},
-    this.methodDescriptorsendMouse);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/sendMouse",
+      request,
+      metadata || {},
+      this.methodDescriptorsendMouse,
+    );
   }
 
   methodDescriptorsendPhone = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/sendPhone',
+    "/android.emulation.control.EmulatorController/sendPhone",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.PhoneCall,
     emulator_controller_pb.PhoneResponse,
     (request: emulator_controller_pb.PhoneCall) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.PhoneResponse.deserializeBinary
+    emulator_controller_pb.PhoneResponse.deserializeBinary,
   );
 
   sendPhone(
     request: emulator_controller_pb.PhoneCall,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.PhoneResponse>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.PhoneResponse>;
 
   sendPhone(
     request: emulator_controller_pb.PhoneCall,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhoneResponse) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.PhoneResponse>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhoneResponse,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.PhoneResponse>;
 
   sendPhone(
     request: emulator_controller_pb.PhoneCall,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhoneResponse) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhoneResponse,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/sendPhone',
+          "/android.emulation.control.EmulatorController/sendPhone",
         request,
         metadata || {},
         this.methodDescriptorsendPhone,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/sendPhone',
-    request,
-    metadata || {},
-    this.methodDescriptorsendPhone);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/sendPhone",
+      request,
+      metadata || {},
+      this.methodDescriptorsendPhone,
+    );
   }
 
   methodDescriptorsendSms = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/sendSms',
+    "/android.emulation.control.EmulatorController/sendSms",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.SmsMessage,
     emulator_controller_pb.PhoneResponse,
     (request: emulator_controller_pb.SmsMessage) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.PhoneResponse.deserializeBinary
+    emulator_controller_pb.PhoneResponse.deserializeBinary,
   );
 
   sendSms(
     request: emulator_controller_pb.SmsMessage,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.PhoneResponse>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.PhoneResponse>;
 
   sendSms(
     request: emulator_controller_pb.SmsMessage,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhoneResponse) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.PhoneResponse>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhoneResponse,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.PhoneResponse>;
 
   sendSms(
     request: emulator_controller_pb.SmsMessage,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhoneResponse) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhoneResponse,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/sendSms',
+          "/android.emulation.control.EmulatorController/sendSms",
         request,
         metadata || {},
         this.methodDescriptorsendSms,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/sendSms',
-    request,
-    metadata || {},
-    this.methodDescriptorsendSms);
+      this.hostname_ + "/android.emulation.control.EmulatorController/sendSms",
+      request,
+      metadata || {},
+      this.methodDescriptorsendSms,
+    );
   }
 
   methodDescriptorsetPhoneNumber = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setPhoneNumber',
+    "/android.emulation.control.EmulatorController/setPhoneNumber",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.PhoneNumber,
     emulator_controller_pb.PhoneResponse,
     (request: emulator_controller_pb.PhoneNumber) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.PhoneResponse.deserializeBinary
+    emulator_controller_pb.PhoneResponse.deserializeBinary,
   );
 
   setPhoneNumber(
     request: emulator_controller_pb.PhoneNumber,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.PhoneResponse>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.PhoneResponse>;
 
   setPhoneNumber(
     request: emulator_controller_pb.PhoneNumber,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhoneResponse) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.PhoneResponse>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhoneResponse,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.PhoneResponse>;
 
   setPhoneNumber(
     request: emulator_controller_pb.PhoneNumber,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.PhoneResponse) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.PhoneResponse,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setPhoneNumber',
+          "/android.emulation.control.EmulatorController/setPhoneNumber",
         request,
         metadata || {},
         this.methodDescriptorsetPhoneNumber,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setPhoneNumber',
-    request,
-    metadata || {},
-    this.methodDescriptorsetPhoneNumber);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setPhoneNumber",
+      request,
+      metadata || {},
+      this.methodDescriptorsetPhoneNumber,
+    );
   }
 
   methodDescriptorgetStatus = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getStatus',
+    "/android.emulation.control.EmulatorController/getStatus",
     grpcWeb.MethodType.UNARY,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.EmulatorStatus,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.EmulatorStatus.deserializeBinary
+    emulator_controller_pb.EmulatorStatus.deserializeBinary,
   );
 
   getStatus(
     request: google_protobuf_empty_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.EmulatorStatus>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.EmulatorStatus>;
 
   getStatus(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.EmulatorStatus) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.EmulatorStatus>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.EmulatorStatus,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.EmulatorStatus>;
 
   getStatus(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.EmulatorStatus) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.EmulatorStatus,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getStatus',
+          "/android.emulation.control.EmulatorController/getStatus",
         request,
         metadata || {},
         this.methodDescriptorgetStatus,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getStatus',
-    request,
-    metadata || {},
-    this.methodDescriptorgetStatus);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getStatus",
+      request,
+      metadata || {},
+      this.methodDescriptorgetStatus,
+    );
   }
 
   methodDescriptorgetScreenshot = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getScreenshot',
+    "/android.emulation.control.EmulatorController/getScreenshot",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.ImageFormat,
     emulator_controller_pb.Image,
     (request: emulator_controller_pb.ImageFormat) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.Image.deserializeBinary
+    emulator_controller_pb.Image.deserializeBinary,
   );
 
   getScreenshot(
     request: emulator_controller_pb.ImageFormat,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.Image>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.Image>;
 
   getScreenshot(
     request: emulator_controller_pb.ImageFormat,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.Image) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.Image>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.Image,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.Image>;
 
   getScreenshot(
     request: emulator_controller_pb.ImageFormat,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.Image) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.Image,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getScreenshot',
+          "/android.emulation.control.EmulatorController/getScreenshot",
         request,
         metadata || {},
         this.methodDescriptorgetScreenshot,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getScreenshot',
-    request,
-    metadata || {},
-    this.methodDescriptorgetScreenshot);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getScreenshot",
+      request,
+      metadata || {},
+      this.methodDescriptorgetScreenshot,
+    );
   }
 
   methodDescriptorstreamScreenshot = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/streamScreenshot',
+    "/android.emulation.control.EmulatorController/streamScreenshot",
     grpcWeb.MethodType.SERVER_STREAMING,
     emulator_controller_pb.ImageFormat,
     emulator_controller_pb.Image,
     (request: emulator_controller_pb.ImageFormat) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.Image.deserializeBinary
+    emulator_controller_pb.Image.deserializeBinary,
   );
 
   streamScreenshot(
     request: emulator_controller_pb.ImageFormat,
-    metadata?: grpcWeb.Metadata): grpcWeb.ClientReadableStream<emulator_controller_pb.Image> {
+    metadata?: grpcWeb.Metadata,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.Image> {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/android.emulation.control.EmulatorController/streamScreenshot',
+        "/android.emulation.control.EmulatorController/streamScreenshot",
       request,
       metadata || {},
-      this.methodDescriptorstreamScreenshot);
+      this.methodDescriptorstreamScreenshot,
+    );
   }
 
   methodDescriptorstreamAudio = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/streamAudio',
+    "/android.emulation.control.EmulatorController/streamAudio",
     grpcWeb.MethodType.SERVER_STREAMING,
     emulator_controller_pb.AudioFormat,
     emulator_controller_pb.AudioPacket,
     (request: emulator_controller_pb.AudioFormat) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.AudioPacket.deserializeBinary
+    emulator_controller_pb.AudioPacket.deserializeBinary,
   );
 
   streamAudio(
     request: emulator_controller_pb.AudioFormat,
-    metadata?: grpcWeb.Metadata): grpcWeb.ClientReadableStream<emulator_controller_pb.AudioPacket> {
+    metadata?: grpcWeb.Metadata,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.AudioPacket> {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/android.emulation.control.EmulatorController/streamAudio',
+        "/android.emulation.control.EmulatorController/streamAudio",
       request,
       metadata || {},
-      this.methodDescriptorstreamAudio);
+      this.methodDescriptorstreamAudio,
+    );
   }
 
   methodDescriptorgetLogcat = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getLogcat',
+    "/android.emulation.control.EmulatorController/getLogcat",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.LogMessage,
     emulator_controller_pb.LogMessage,
     (request: emulator_controller_pb.LogMessage) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.LogMessage.deserializeBinary
+    emulator_controller_pb.LogMessage.deserializeBinary,
   );
 
   getLogcat(
     request: emulator_controller_pb.LogMessage,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.LogMessage>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.LogMessage>;
 
   getLogcat(
     request: emulator_controller_pb.LogMessage,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.LogMessage) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.LogMessage>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.LogMessage,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.LogMessage>;
 
   getLogcat(
     request: emulator_controller_pb.LogMessage,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.LogMessage) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.LogMessage,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getLogcat',
+          "/android.emulation.control.EmulatorController/getLogcat",
         request,
         metadata || {},
         this.methodDescriptorgetLogcat,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getLogcat',
-    request,
-    metadata || {},
-    this.methodDescriptorgetLogcat);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getLogcat",
+      request,
+      metadata || {},
+      this.methodDescriptorgetLogcat,
+    );
   }
 
   methodDescriptorstreamLogcat = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/streamLogcat',
+    "/android.emulation.control.EmulatorController/streamLogcat",
     grpcWeb.MethodType.SERVER_STREAMING,
     emulator_controller_pb.LogMessage,
     emulator_controller_pb.LogMessage,
     (request: emulator_controller_pb.LogMessage) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.LogMessage.deserializeBinary
+    emulator_controller_pb.LogMessage.deserializeBinary,
   );
 
   streamLogcat(
     request: emulator_controller_pb.LogMessage,
-    metadata?: grpcWeb.Metadata): grpcWeb.ClientReadableStream<emulator_controller_pb.LogMessage> {
+    metadata?: grpcWeb.Metadata,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.LogMessage> {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/android.emulation.control.EmulatorController/streamLogcat',
+        "/android.emulation.control.EmulatorController/streamLogcat",
       request,
       metadata || {},
-      this.methodDescriptorstreamLogcat);
+      this.methodDescriptorstreamLogcat,
+    );
   }
 
   methodDescriptorsetVmState = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setVmState',
+    "/android.emulation.control.EmulatorController/setVmState",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.VmRunState,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.VmRunState) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setVmState(
     request: emulator_controller_pb.VmRunState,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setVmState(
     request: emulator_controller_pb.VmRunState,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setVmState(
     request: emulator_controller_pb.VmRunState,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setVmState',
+          "/android.emulation.control.EmulatorController/setVmState",
         request,
         metadata || {},
         this.methodDescriptorsetVmState,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setVmState',
-    request,
-    metadata || {},
-    this.methodDescriptorsetVmState);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setVmState",
+      request,
+      metadata || {},
+      this.methodDescriptorsetVmState,
+    );
   }
 
   methodDescriptorgetVmState = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getVmState',
+    "/android.emulation.control.EmulatorController/getVmState",
     grpcWeb.MethodType.UNARY,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.VmRunState,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.VmRunState.deserializeBinary
+    emulator_controller_pb.VmRunState.deserializeBinary,
   );
 
   getVmState(
     request: google_protobuf_empty_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.VmRunState>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.VmRunState>;
 
   getVmState(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.VmRunState) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.VmRunState>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.VmRunState,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.VmRunState>;
 
   getVmState(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.VmRunState) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.VmRunState,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getVmState',
+          "/android.emulation.control.EmulatorController/getVmState",
         request,
         metadata || {},
         this.methodDescriptorgetVmState,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getVmState',
-    request,
-    metadata || {},
-    this.methodDescriptorgetVmState);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getVmState",
+      request,
+      metadata || {},
+      this.methodDescriptorgetVmState,
+    );
   }
 
   methodDescriptorsetDisplayConfigurations = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setDisplayConfigurations',
+    "/android.emulation.control.EmulatorController/setDisplayConfigurations",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.DisplayConfigurations,
     emulator_controller_pb.DisplayConfigurations,
     (request: emulator_controller_pb.DisplayConfigurations) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.DisplayConfigurations.deserializeBinary
+    emulator_controller_pb.DisplayConfigurations.deserializeBinary,
   );
 
   setDisplayConfigurations(
     request: emulator_controller_pb.DisplayConfigurations,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.DisplayConfigurations>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.DisplayConfigurations>;
 
   setDisplayConfigurations(
     request: emulator_controller_pb.DisplayConfigurations,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.DisplayConfigurations) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.DisplayConfigurations>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.DisplayConfigurations,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.DisplayConfigurations>;
 
   setDisplayConfigurations(
     request: emulator_controller_pb.DisplayConfigurations,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.DisplayConfigurations) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.DisplayConfigurations,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setDisplayConfigurations',
+          "/android.emulation.control.EmulatorController/setDisplayConfigurations",
         request,
         metadata || {},
         this.methodDescriptorsetDisplayConfigurations,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setDisplayConfigurations',
-    request,
-    metadata || {},
-    this.methodDescriptorsetDisplayConfigurations);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setDisplayConfigurations",
+      request,
+      metadata || {},
+      this.methodDescriptorsetDisplayConfigurations,
+    );
   }
 
   methodDescriptorgetDisplayConfigurations = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getDisplayConfigurations',
+    "/android.emulation.control.EmulatorController/getDisplayConfigurations",
     grpcWeb.MethodType.UNARY,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.DisplayConfigurations,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.DisplayConfigurations.deserializeBinary
+    emulator_controller_pb.DisplayConfigurations.deserializeBinary,
   );
 
   getDisplayConfigurations(
     request: google_protobuf_empty_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.DisplayConfigurations>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.DisplayConfigurations>;
 
   getDisplayConfigurations(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.DisplayConfigurations) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.DisplayConfigurations>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.DisplayConfigurations,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.DisplayConfigurations>;
 
   getDisplayConfigurations(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.DisplayConfigurations) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.DisplayConfigurations,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getDisplayConfigurations',
+          "/android.emulation.control.EmulatorController/getDisplayConfigurations",
         request,
         metadata || {},
         this.methodDescriptorgetDisplayConfigurations,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getDisplayConfigurations',
-    request,
-    metadata || {},
-    this.methodDescriptorgetDisplayConfigurations);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getDisplayConfigurations",
+      request,
+      metadata || {},
+      this.methodDescriptorgetDisplayConfigurations,
+    );
   }
 
   methodDescriptorstreamNotification = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/streamNotification',
+    "/android.emulation.control.EmulatorController/streamNotification",
     grpcWeb.MethodType.SERVER_STREAMING,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.Notification,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.Notification.deserializeBinary
+    emulator_controller_pb.Notification.deserializeBinary,
   );
 
   streamNotification(
     request: google_protobuf_empty_pb.Empty,
-    metadata?: grpcWeb.Metadata): grpcWeb.ClientReadableStream<emulator_controller_pb.Notification> {
+    metadata?: grpcWeb.Metadata,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.Notification> {
     return this.client_.serverStreaming(
       this.hostname_ +
-        '/android.emulation.control.EmulatorController/streamNotification',
+        "/android.emulation.control.EmulatorController/streamNotification",
       request,
       metadata || {},
-      this.methodDescriptorstreamNotification);
+      this.methodDescriptorstreamNotification,
+    );
   }
 
   methodDescriptorrotateVirtualSceneCamera = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/rotateVirtualSceneCamera',
+    "/android.emulation.control.EmulatorController/rotateVirtualSceneCamera",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.RotationRadian,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.RotationRadian) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   rotateVirtualSceneCamera(
     request: emulator_controller_pb.RotationRadian,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   rotateVirtualSceneCamera(
     request: emulator_controller_pb.RotationRadian,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   rotateVirtualSceneCamera(
     request: emulator_controller_pb.RotationRadian,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/rotateVirtualSceneCamera',
+          "/android.emulation.control.EmulatorController/rotateVirtualSceneCamera",
         request,
         metadata || {},
         this.methodDescriptorrotateVirtualSceneCamera,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/rotateVirtualSceneCamera',
-    request,
-    metadata || {},
-    this.methodDescriptorrotateVirtualSceneCamera);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/rotateVirtualSceneCamera",
+      request,
+      metadata || {},
+      this.methodDescriptorrotateVirtualSceneCamera,
+    );
   }
 
   methodDescriptorsetVirtualSceneCameraVelocity = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setVirtualSceneCameraVelocity',
+    "/android.emulation.control.EmulatorController/setVirtualSceneCameraVelocity",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.Velocity,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.Velocity) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setVirtualSceneCameraVelocity(
     request: emulator_controller_pb.Velocity,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setVirtualSceneCameraVelocity(
     request: emulator_controller_pb.Velocity,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setVirtualSceneCameraVelocity(
     request: emulator_controller_pb.Velocity,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setVirtualSceneCameraVelocity',
+          "/android.emulation.control.EmulatorController/setVirtualSceneCameraVelocity",
         request,
         metadata || {},
         this.methodDescriptorsetVirtualSceneCameraVelocity,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setVirtualSceneCameraVelocity',
-    request,
-    metadata || {},
-    this.methodDescriptorsetVirtualSceneCameraVelocity);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setVirtualSceneCameraVelocity",
+      request,
+      metadata || {},
+      this.methodDescriptorsetVirtualSceneCameraVelocity,
+    );
   }
 
   methodDescriptorsetPosture = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setPosture',
+    "/android.emulation.control.EmulatorController/setPosture",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.Posture,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.Posture) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setPosture(
     request: emulator_controller_pb.Posture,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setPosture(
     request: emulator_controller_pb.Posture,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setPosture(
     request: emulator_controller_pb.Posture,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setPosture',
+          "/android.emulation.control.EmulatorController/setPosture",
         request,
         metadata || {},
         this.methodDescriptorsetPosture,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setPosture',
-    request,
-    metadata || {},
-    this.methodDescriptorsetPosture);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setPosture",
+      request,
+      metadata || {},
+      this.methodDescriptorsetPosture,
+    );
   }
 
   methodDescriptorgetBrightness = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getBrightness',
+    "/android.emulation.control.EmulatorController/getBrightness",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.BrightnessValue,
     emulator_controller_pb.BrightnessValue,
     (request: emulator_controller_pb.BrightnessValue) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.BrightnessValue.deserializeBinary
+    emulator_controller_pb.BrightnessValue.deserializeBinary,
   );
 
   getBrightness(
     request: emulator_controller_pb.BrightnessValue,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.BrightnessValue>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.BrightnessValue>;
 
   getBrightness(
     request: emulator_controller_pb.BrightnessValue,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.BrightnessValue) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.BrightnessValue>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.BrightnessValue,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.BrightnessValue>;
 
   getBrightness(
     request: emulator_controller_pb.BrightnessValue,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.BrightnessValue) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.BrightnessValue,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getBrightness',
+          "/android.emulation.control.EmulatorController/getBrightness",
         request,
         metadata || {},
         this.methodDescriptorgetBrightness,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getBrightness',
-    request,
-    metadata || {},
-    this.methodDescriptorgetBrightness);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getBrightness",
+      request,
+      metadata || {},
+      this.methodDescriptorgetBrightness,
+    );
   }
 
   methodDescriptorsetBrightness = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setBrightness',
+    "/android.emulation.control.EmulatorController/setBrightness",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.BrightnessValue,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.BrightnessValue) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setBrightness(
     request: emulator_controller_pb.BrightnessValue,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setBrightness(
     request: emulator_controller_pb.BrightnessValue,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setBrightness(
     request: emulator_controller_pb.BrightnessValue,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setBrightness',
+          "/android.emulation.control.EmulatorController/setBrightness",
         request,
         metadata || {},
         this.methodDescriptorsetBrightness,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setBrightness',
-    request,
-    metadata || {},
-    this.methodDescriptorsetBrightness);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setBrightness",
+      request,
+      metadata || {},
+      this.methodDescriptorsetBrightness,
+    );
   }
 
   methodDescriptorgetDisplayMode = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/getDisplayMode',
+    "/android.emulation.control.EmulatorController/getDisplayMode",
     grpcWeb.MethodType.UNARY,
     google_protobuf_empty_pb.Empty,
     emulator_controller_pb.DisplayMode,
     (request: google_protobuf_empty_pb.Empty) => {
       return request.serializeBinary();
     },
-    emulator_controller_pb.DisplayMode.deserializeBinary
+    emulator_controller_pb.DisplayMode.deserializeBinary,
   );
 
   getDisplayMode(
     request: google_protobuf_empty_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<emulator_controller_pb.DisplayMode>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<emulator_controller_pb.DisplayMode>;
 
   getDisplayMode(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.DisplayMode) => void): grpcWeb.ClientReadableStream<emulator_controller_pb.DisplayMode>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.DisplayMode,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<emulator_controller_pb.DisplayMode>;
 
   getDisplayMode(
     request: google_protobuf_empty_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: emulator_controller_pb.DisplayMode) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: emulator_controller_pb.DisplayMode,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/getDisplayMode',
+          "/android.emulation.control.EmulatorController/getDisplayMode",
         request,
         metadata || {},
         this.methodDescriptorgetDisplayMode,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/getDisplayMode',
-    request,
-    metadata || {},
-    this.methodDescriptorgetDisplayMode);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/getDisplayMode",
+      request,
+      metadata || {},
+      this.methodDescriptorgetDisplayMode,
+    );
   }
 
   methodDescriptorsetDisplayMode = new grpcWeb.MethodDescriptor(
-    '/android.emulation.control.EmulatorController/setDisplayMode',
+    "/android.emulation.control.EmulatorController/setDisplayMode",
     grpcWeb.MethodType.UNARY,
     emulator_controller_pb.DisplayMode,
     google_protobuf_empty_pb.Empty,
     (request: emulator_controller_pb.DisplayMode) => {
       return request.serializeBinary();
     },
-    google_protobuf_empty_pb.Empty.deserializeBinary
+    google_protobuf_empty_pb.Empty.deserializeBinary,
   );
 
   setDisplayMode(
     request: emulator_controller_pb.DisplayMode,
-    metadata: grpcWeb.Metadata | null): Promise<google_protobuf_empty_pb.Empty>;
+    metadata: grpcWeb.Metadata | null,
+  ): Promise<google_protobuf_empty_pb.Empty>;
 
   setDisplayMode(
     request: emulator_controller_pb.DisplayMode,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
+    callback: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ): grpcWeb.ClientReadableStream<google_protobuf_empty_pb.Empty>;
 
   setDisplayMode(
     request: emulator_controller_pb.DisplayMode,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: google_protobuf_empty_pb.Empty) => void) {
+    callback?: (
+      err: grpcWeb.RpcError,
+      response: google_protobuf_empty_pb.Empty,
+    ) => void,
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/android.emulation.control.EmulatorController/setDisplayMode',
+          "/android.emulation.control.EmulatorController/setDisplayMode",
         request,
         metadata || {},
         this.methodDescriptorsetDisplayMode,
-        callback);
+        callback,
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/android.emulation.control.EmulatorController/setDisplayMode',
-    request,
-    metadata || {},
-    this.methodDescriptorsetDisplayMode);
+      this.hostname_ +
+        "/android.emulation.control.EmulatorController/setDisplayMode",
+      request,
+      metadata || {},
+      this.methodDescriptorsetDisplayMode,
+    );
   }
-
 }
-

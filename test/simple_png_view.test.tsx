@@ -47,10 +47,12 @@ describe("A simple png view", () => {
   (EmulatorControllerService as jest.Mock).mockImplementation(() => {
     let count = 0;
     return {
-      getScreenshot: jest.fn((a, b, response: (err: any, response: any) => void) => {
-        count++;
-        if (count < 2) response(null, googleImage);
-      }),
+      getScreenshot: jest.fn(
+        (a, b, response: (err: any, response: any) => void) => {
+          count++;
+          if (count < 2) response(null, googleImage);
+        },
+      ),
       streamScreenshot: jest.fn((request) => {
         stream.removeAllListeners();
         return {
@@ -73,7 +75,7 @@ describe("A simple png view", () => {
     const { container } = render(
       <div style={{ width: "200px", height: "200px" }}>
         <EmulatorPngView emulator={emulatorServiceInstance} />
-      </div>
+      </div>,
     );
 
     expect(emulatorServiceInstance.streamScreenshot).toHaveBeenCalledTimes(1);
@@ -82,7 +84,7 @@ describe("A simple png view", () => {
   it("Get screenshot renders an image.", () => {
     const emulatorServiceInstance = new EmulatorControllerService("http://foo");
     const { container } = render(
-      <EmulatorPngView emulator={emulatorServiceInstance} poll={true} />
+      <EmulatorPngView emulator={emulatorServiceInstance} poll={true} />,
     );
     const pngView = container.querySelector("img");
     expect(pngView?.src).toBe("data:image/jpeg;base64," + googleLogo);
@@ -95,7 +97,7 @@ describe("A simple png view", () => {
       <EmulatorPngView
         emulator={emulatorServiceInstance}
         onStateChange={changeState}
-      />
+      />,
     );
     expect(changeState).toHaveBeenCalledWith("connecting");
     act(() => stream.emit("data", googleImage));
@@ -109,7 +111,7 @@ describe("A simple png view", () => {
       <EmulatorPngView
         emulator={emulatorServiceInstance}
         onStateChange={changeState}
-      />
+      />,
     );
     expect(emulatorServiceInstance.streamScreenshot).toHaveBeenCalledTimes(1);
     stream.emit("data", googleImage);
@@ -125,7 +127,7 @@ describe("A simple png view", () => {
       <EmulatorPngView
         emulator={emulatorServiceInstance}
         onStateChange={changeState}
-      />
+      />,
     );
     expect(emulatorServiceInstance.streamScreenshot).toHaveBeenCalledTimes(1);
 

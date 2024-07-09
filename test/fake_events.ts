@@ -25,7 +25,13 @@ export function fakeMouseEvent(tp: string, x: any, y: any, props = {}) {
   return event;
 }
 
-export function fakeTouchEvent(tp: string, x: any, y: any, force: any, props = {}) {
+export function fakeTouchEvent(
+  tp: string,
+  x: any,
+  y: any,
+  force: any,
+  props = {},
+) {
   const event = new TouchEvent(tp, {
     bubbles: true,
     cancelable: true,
@@ -43,7 +49,9 @@ export function fakeTouchEvent(tp: string, x: any, y: any, force: any, props = {
 export function resize(width: number, height: number) {
   const resizeEvent = document.createEvent("Event");
   resizeEvent.initEvent("resize", true, true);
-  (global.window as any).innerWidth = width || (global.window as any).innerWidth;
-  (global.window as any).innerHeight = height || (global.window as any).innerHeight;
+  (global.window as any).innerWidth =
+    width || (global.window as any).innerWidth;
+  (global.window as any).innerHeight =
+    height || (global.window as any).innerHeight;
   global.window.dispatchEvent(resizeEvent);
 }

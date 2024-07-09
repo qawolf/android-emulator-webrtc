@@ -33,13 +33,11 @@ const EmulatorWebrtcView = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [connect, setConnect] = useState("connecting");
 
-
   useEffect(() => {
     if (onStateChange) {
       onStateChange(connect);
     }
   }, [connect]);
-
 
   useEffect(() => {
     if (onAudioStateChange) {
@@ -100,7 +98,7 @@ const EmulatorWebrtcView = ({
   useEffect(() => {
     jsep.on("connected", onConnect);
     jsep.on("disconnected", onDisconnect);
-    jsep.startStream()
+    jsep.startStream();
 
     setConnect("connecting");
 
@@ -128,4 +126,3 @@ const EmulatorWebrtcView = ({
 };
 
 export default EmulatorWebrtcView;
-

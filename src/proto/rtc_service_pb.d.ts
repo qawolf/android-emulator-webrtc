@@ -1,7 +1,6 @@
-import * as jspb from 'google-protobuf'
+import * as jspb from "google-protobuf";
 
-import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
-
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 
 export class RtcId extends jspb.Message {
   getGuid(): string;
@@ -10,15 +9,21 @@ export class RtcId extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RtcId.AsObject;
   static toObject(includeInstance: boolean, msg: RtcId): RtcId.AsObject;
-  static serializeBinaryToWriter(message: RtcId, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: RtcId,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): RtcId;
-  static deserializeBinaryFromReader(message: RtcId, reader: jspb.BinaryReader): RtcId;
+  static deserializeBinaryFromReader(
+    message: RtcId,
+    reader: jspb.BinaryReader,
+  ): RtcId;
 }
 
 export namespace RtcId {
   export type AsObject = {
-    guid: string,
-  }
+    guid: string;
+  };
 }
 
 export class JsepMsg extends jspb.Message {
@@ -33,15 +38,20 @@ export class JsepMsg extends jspb.Message {
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): JsepMsg.AsObject;
   static toObject(includeInstance: boolean, msg: JsepMsg): JsepMsg.AsObject;
-  static serializeBinaryToWriter(message: JsepMsg, writer: jspb.BinaryWriter): void;
+  static serializeBinaryToWriter(
+    message: JsepMsg,
+    writer: jspb.BinaryWriter,
+  ): void;
   static deserializeBinary(bytes: Uint8Array): JsepMsg;
-  static deserializeBinaryFromReader(message: JsepMsg, reader: jspb.BinaryReader): JsepMsg;
+  static deserializeBinaryFromReader(
+    message: JsepMsg,
+    reader: jspb.BinaryReader,
+  ): JsepMsg;
 }
 
 export namespace JsepMsg {
   export type AsObject = {
-    id?: RtcId.AsObject,
-    message: string,
-  }
+    id?: RtcId.AsObject;
+    message: string;
+  };
 }
-

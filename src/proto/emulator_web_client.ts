@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {GrpcWebClientBase, Metadata, MethodDescriptor, RpcError} from "grpc-web";
+import {
+  GrpcWebClientBase,
+  Metadata,
+  MethodDescriptor,
+  RpcError,
+} from "grpc-web";
 import { EventEmitter } from "events";
 
 import { RtcClient } from "./Rtc_serviceServiceClientPb";
-import {EmulatorControllerClient} from "./Emulator_controllerServiceClientPb";
+import { EmulatorControllerClient } from "./Emulator_controllerServiceClientPb";
 
 export type Authenticator = {
   authHeader: () => {
@@ -30,7 +35,7 @@ export class NopAuthenticator implements Authenticator {
   authHeader = () => {
     return {};
   };
-  unauthorized = () => { };
+  unauthorized = () => {};
 }
 
 /**
@@ -45,12 +50,13 @@ class EmulatorWebClient extends GrpcWebClientBase {
   auth: Authenticator;
   events: EventEmitter;
 
-
   constructor(options: any, auth: Authenticator) {
     super(options);
     this.auth = auth;
     this.events = new EventEmitter();
-    this.events.on("error", e => {console.log("low level gRPC error: " + JSON.stringify(e));})
+    this.events.on("error", (e) => {
+      console.log("low level gRPC error: " + JSON.stringify(e));
+    });
   }
 
   on = (name: string, fn: (...args: any[]) => void) => {
@@ -58,45 +64,55 @@ class EmulatorWebClient extends GrpcWebClientBase {
   };
 
   rpcCall<REQ, RESP>(
-      method: string,
-      request: REQ,
-      metadata: Metadata,
-      methodDescriptor: MethodDescriptor<REQ, RESP>,
-      callback: (err: RpcError, response: RESP) => void,
-      ) {
-    const authHeader = this.auth.authHeader();
-    const meta = { ...metadata, ...authHeader };
-    const self = this;
-    return super.rpcCall(method, request, meta, methodDescriptor, (err, res) => {
-      if (err) {
-        if (err.code === 401) self.auth.unauthorized();
-        if (self.events)
-          self.events.emit("error", err);
-      }
-      if (callback) callback(err, res);
-    });
-  };
-
-  serverStreaming<REQ, RESP> (
-      method: string,
-      request: REQ,
-      metadata: Metadata,
-      methodDescriptor: MethodDescriptor<REQ, RESP>
+    method: string,
+    request: REQ,
+    metadata: Metadata,
+    methodDescriptor: MethodDescriptor<REQ, RESP>,
+    callback: (err: RpcError, response: RESP) => void,
   ) {
     const authHeader = this.auth.authHeader();
     const meta = { ...metadata, ...authHeader };
-    const stream = super.serverStreaming(method, request, meta, methodDescriptor);
+    const self = this;
+    return super.rpcCall(
+      method,
+      request,
+      meta,
+      methodDescriptor,
+      (err, res) => {
+        if (err) {
+          if (err.code === 401) self.auth.unauthorized();
+          if (self.events) self.events.emit("error", err);
+        }
+        if (callback) callback(err, res);
+      },
+    );
+  }
+
+  serverStreaming<REQ, RESP>(
+    method: string,
+    request: REQ,
+    metadata: Metadata,
+    methodDescriptor: MethodDescriptor<REQ, RESP>,
+  ) {
+    const authHeader = this.auth.authHeader();
+    const meta = { ...metadata, ...authHeader };
+    const stream = super.serverStreaming(
+      method,
+      request,
+      meta,
+      methodDescriptor,
+    );
     const self = this;
 
     // Intercept errors.
-    stream.on("error", e => {
+    stream.on("error", (e) => {
       if (e.code === 401) {
         self.auth.unauthorized();
       }
       self.events.emit("error", e);
     });
     return stream;
-  };
+  }
 }
 
 /**
@@ -125,14 +141,20 @@ export class EmulatorControllerService extends EmulatorControllerClient {
    * @param onError callback that will be invoked when a low level gRPC error arises.
    * @memberof EmulatorControllerService
    */
-  constructor(uri: string, authenticator?: Authenticator, onError?: (e: any) => void) {
+  constructor(
+    uri: string,
+    authenticator?: Authenticator,
+    onError?: (e: any) => void,
+  ) {
     super(uri);
     if (!authenticator) authenticator = new NopAuthenticator();
     this.client_ = new EmulatorWebClient({}, authenticator);
-    if (onError) this.client_.on('error', e => { onError(e); });
+    if (onError)
+      this.client_.on("error", (e) => {
+        onError(e);
+      });
   }
 }
-
 
 /**
  * An RtcService is an RtcClient that inject authentication headers.
@@ -156,10 +178,17 @@ export class RtcService extends RtcClient {
    * @param onError callback that will be invoked when a low level gRPC error arises.
    * @memberof RtcService
    */
-  constructor(uri: string, authenticator?: Authenticator, onError?: (e: any) => void) {
+  constructor(
+    uri: string,
+    authenticator?: Authenticator,
+    onError?: (e: any) => void,
+  ) {
     super(uri);
     if (!authenticator) authenticator = new NopAuthenticator();
     this.client_ = new EmulatorWebClient({}, authenticator);
-    if (onError) this.client_.on('error', e => { onError(e); });
+    if (onError)
+      this.client_.on("error", (e) => {
+        onError(e);
+      });
   }
 }

@@ -15,8 +15,12 @@
  */
 import { EventEmitter } from "events";
 import "../../../proto/emulator_controller_pb";
-import {Authenticator, EmulatorControllerService, NopAuthenticator} from "../../../proto/emulator_web_client";
-import {LogMessage} from "../../../proto/emulator_controller_pb";
+import {
+  Authenticator,
+  EmulatorControllerService,
+  NopAuthenticator,
+} from "../../../proto/emulator_web_client";
+import { LogMessage } from "../../../proto/emulator_controller_pb";
 
 /**
  * Observe the logcat stream from the emulator.
@@ -38,7 +42,6 @@ class Logcat {
   refreshRate: number;
   timerID: NodeJS.Timeout | null;
 
-
   /**
    * Creates a logcat stream.
    *
@@ -50,7 +53,10 @@ class Logcat {
    * @param {object} uriOrEmulator
    * @param {object} auth
    */
-  constructor(uriOrEmulator: EmulatorControllerService | string, auth: Authenticator = new NopAuthenticator()) {
+  constructor(
+    uriOrEmulator: EmulatorControllerService | string,
+    auth: Authenticator = new NopAuthenticator(),
+  ) {
     if (uriOrEmulator instanceof EmulatorControllerService) {
       this.emulator = uriOrEmulator;
     } else {
@@ -109,14 +115,14 @@ class Logcat {
     request.setStart(this.offset);
     this.emulator.getLogcat(request, {}, (err: Error | null, response: any) => {
       if (err) {
-      this.stop();
+        this.stop();
       }
       if (response) {
-      const nextOffset: number = response.getNext();
-      if (nextOffset > this.offset) {
-        this.offset = response.getNext();
-        this.events.emit("data", response.getContents());
-      }
+        const nextOffset: number = response.getNext();
+        if (nextOffset > this.offset) {
+          this.offset = response.getNext();
+          this.events.emit("data", response.getContents());
+        }
       }
     });
   };
@@ -135,7 +141,7 @@ class Logcat {
     });
     this.stream.on("error", (error: any) => {
       if ((error.code = 1)) {
-      // Ignore we got cancelled.
+        // Ignore we got cancelled.
       }
     });
   };
