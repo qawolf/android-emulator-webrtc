@@ -44,17 +44,17 @@ googleImage.setImage(Uint8Array.from(atob(googleLogo), (c) => c.charCodeAt(0)));
 
 const stream = new EventEmitter();
 describe("A simple png view", () => {
-  EmulatorControllerService.mockImplementation(() => {
+  (EmulatorControllerService as jest.Mock).mockImplementation(() => {
     let count = 0;
     return {
-      getScreenshot: jest.fn((a, b, response) => {
+      getScreenshot: jest.fn((a, b, response: (err: any, response: any) => void) => {
         count++;
         if (count < 2) response(null, googleImage);
       }),
       streamScreenshot: jest.fn((request) => {
         stream.removeAllListeners();
         return {
-          on: (name, fn) => {
+          on: (name: string, fn: (...args: any[]) => void) => {
             stream.on(name, fn);
           },
           cancel: jest.fn(),
@@ -85,7 +85,7 @@ describe("A simple png view", () => {
       <EmulatorPngView emulator={emulatorServiceInstance} poll={true} />
     );
     const pngView = container.querySelector("img");
-    expect(pngView.src).toBe("data:image/jpeg;base64," + googleLogo);
+    expect(pngView?.src).toBe("data:image/jpeg;base64," + googleLogo);
   });
 
   it("Has a connected state after the first image arrives", () => {

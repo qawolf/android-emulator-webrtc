@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
-import { EmulatorControllerService, NopAuthenticator } from "../../../proto/emulator_web_client";
-
-
-export type EmulatorStatusData = {
-  version: string;
-  uptime: number;
-  booted: boolean;
-  hardwareConfig: object;
-  vmConfig: {
-    hypervisorType: string;
-    numberOfCpuCores: number;
-    ramSizeBytes: number;
-  };
-}
+import {Authenticator, EmulatorControllerService, NopAuthenticator} from "../../../proto/emulator_web_client";
+import {EmulatorStatus as EmulatorStatusProto} from "../../../proto/emulator_controller_pb";
+import {RpcError} from "grpc-web";
 
 /**
  * Gets the status of the emulator, parsing the hardware config into something
@@ -38,7 +27,7 @@ export type EmulatorStatusData = {
  */
 class EmulatorStatus {
   emulator: EmulatorControllerService;
-  status: EmulatorStatusData | null;
+  status: EmulatorStatusProto.AsObject | null;
 
   /**
    * Creates an EmulatorStatus object that can retrieve the status of the running emulator.
@@ -50,7 +39,7 @@ class EmulatorStatus {
    * - `authHeader()` which must return a set of headers that should be send along with a request.
    * - `unauthorized()` a function that gets called when a 401 was received.
    */
-  constructor(uriOrEmulator: EmulatorControllerService | string, auth: typeof NopAuthenticator) {
+  constructor(uriOrEmulator: EmulatorControllerService | string, auth: Authenticator = new NopAuthenticator()) {
     if (uriOrEmulator instanceof EmulatorControllerService) {
       this.emulator = uriOrEmulator;
     } else {
@@ -75,32 +64,31 @@ class EmulatorStatus {
    * @param  {boolean} cache True if the cache can be used.
    * @memberof EmulatorStatus
    */
-  updateStatus = (fnNotify: (status: EmulatorStatusData) => void, cache: boolean) => {
+  updateStatus = (fnNotify: (status: EmulatorStatusProto.AsObject) => void, cache: boolean) => {
     const request = new Empty();
     if (cache && this.status) {
       fnNotify(this.status);
       return this.status;
     }
-    this.emulator.getStatus(request, {}, (err: never, response: any) => {
-      var hwConfig: { [key: string]: any } = {};
-      const entryList = response.getHardwareconfig().getEntryList();
-      for (var i = 0; i < entryList.length; i++) {
-        const key = entryList[i].getKey();
-        const val = entryList[i].getValue();
-        hwConfig[key] = val;
-      }
-
+    this.emulator.getStatus(request, {}, (err: RpcError, response: EmulatorStatusProto) => {
       const vmConfig = response.getVmconfig();
       this.status = {
         version: response.getVersion(),
         uptime: response.getUptime(),
         booted: response.getBooted(),
-        hardwareConfig: hwConfig,
+        hardwareconfig: {
+          entryList: response.getHardwareconfig()?.getEntryList().map((e) => ({
+            key: e.getKey(),
+            value: e.getValue()
+          })) ?? [],
+        },
+      ...(vmConfig && {
         vmConfig: {
           hypervisorType: vmConfig.getHypervisortype(),
           numberOfCpuCores: vmConfig.getNumberofcpucores(),
           ramSizeBytes: vmConfig.getRamsizebytes()
         }
+      })
       };
       fnNotify(this.status);
     });

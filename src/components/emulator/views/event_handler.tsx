@@ -13,12 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import PropTypes from "prop-types";
-import React, {ReactNode} from "react";
+
+import React from "react";
 import * as Proto from "../../../proto/emulator_controller_pb";
 import EmulatorStatus from "../net/emulator_status";
-import JsepProtocol from "./net/jsep_protocol_driver.js";
-import { EmulatorControllerService } from "../../proto/emulator_web_client";
+import JsepProtocol from "../net/jsep_protocol_driver.js";
+import {EmulatorControllerService} from "../../../proto/emulator_web_client";
+import {EmulatorStatus as EmulatorStatusProto} from "../../../proto/emulator_controller_pb";
+import EmulatorWebrtcView from "./webrtc_view";
+import EmulatorPngView from "./simple_png_view";
+
+type MouseKeyHandlerProps = ({
+  emulator: EmulatorControllerService;
+  jsep: JsepProtocol;
+}& React.ComponentProps<typeof EmulatorWebrtcView>)
+    | ({
+  emulator: EmulatorControllerService;
+  jsep: JsepProtocol;
+}& React.ComponentProps<typeof EmulatorPngView>)
+    | {
+  emulator: EmulatorControllerService;
+  jsep: JsepProtocol;
+};
 
 /**
  * A handler that extends a view to send key/mouse events to the emulator.
@@ -30,13 +46,13 @@ import { EmulatorControllerService } from "../../proto/emulator_web_client";
  *
  * You usually want to wrap a EmulatorRtcview, or EmulatorPngView in it.
  */
-export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
+export default function withMouseKeyHandler(WrappedComponent: any) {
   return class extends React.Component {
     emulator: EmulatorControllerService;
     jsep: JsepProtocol;
     status: EmulatorStatus
 
-    props: { emulator: EmulatorControllerService; jsep: JsepProtocol };
+    props: MouseKeyHandlerProps
     state: {
         deviceHeight: number;
         deviceWidth: number;
@@ -50,7 +66,7 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
 
     handler: React.RefObject<HTMLDivElement>;
 
-    constructor(props: { emulator: EmulatorControllerService; jsep: JsepProtocol }) {
+    constructor(props: MouseKeyHandlerProps) {
       super(props);
       this.props = props;
       this.state = {
@@ -65,34 +81,49 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
           mouseButton: 0,
         },
       };
-      this.handler = React.createRef();
-      const { emulator } = this.props;
+      this.handler = React.createRef<HTMLDivElement>();
+      const { emulator, jsep } = this.props;
+      this.emulator = emulator;
+      this.jsep = jsep;
       this.status = new EmulatorStatus(emulator);
     }
+
+    preventDragHandler(e: React.DragEvent<HTMLDivElement>) {
+      e.preventDefault();
+    };
 
     componentDidMount() {
       this.getScreenSize();
     }
 
     getScreenSize() {
-      this.status.updateStatus((state: { hardwareConfig: { [key: string]: string } }) => {
-        this.setState({
-          deviceWidth: parseInt(state.hardwareConfig["hw.lcd.width"]) || 1080,
-          deviceHeight: parseInt(state.hardwareConfig["hw.lcd.height"]) || 1920,
-        });
-      });
-    }
+      this.status.updateStatus((state: EmulatorStatusProto.AsObject) => {
+        const newState = {
+          deviceWidth: 1080,
+          deviceHeight: 1920,
+        };
+        state.hardwareconfig?.entryList?.forEach((entry) => {
+          if (entry.key === "hw.lcd.width") {
+            newState.deviceWidth = parseInt(entry.value);
+          }
+          if (entry.key === "hw.lcd.height") {
+            newState.deviceHeight = parseInt(entry.value);
+          }
+        })
+        this.setState(newState);
+      }, false)
+    };
 
-    onContextMenu = (e: React.MouseEvent) => {
+    onContextMenu(e: React.MouseEvent) {
       e.preventDefault();
     };
 
-    scaleCoordinates = (xp: number, yp: number) => {
+    scaleCoordinates(xp: number, yp: number) {
       // It is totally possible that we send clicks that are offscreen..
       const { deviceWidth, deviceHeight } = this.state;
-      const { clientHeight, clientWidth } = this.handler.current;
-      const scaleX = deviceWidth / clientWidth;
-      const scaleY = deviceHeight / clientHeight;
+      const { clientHeight, clientWidth } = this.handler.current ?? {clientHeight: undefined, clientWidth: undefined};
+      const scaleX = deviceWidth / (clientWidth ?? 1);
+      const scaleY = deviceHeight / (clientHeight ?? 1);
       const x = Math.round(xp * scaleX);
       const y = Math.round(yp * scaleY);
 
@@ -103,7 +134,7 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
       return { x: x, y: y, scaleX: scaleX, scaleY: scaleY };
     };
 
-    setMouseCoordinates = () => {
+    setMouseCoordinates() {
       // Forward the request to the jsep engine.
       const { mouseDown, mouseButton, xp, yp } = this.state.mouse;
       var request = new Proto.MouseEvent();
@@ -115,13 +146,13 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
       jsep.send("mouse", request);
     };
 
-    handleKey = (eventType: "KEYDOWN" | "KEYUP" | "KEYPRESS") => {
-      return (e) => {
+    handleKey(eventType: "KEYDOWN" | "KEYUP" | "KEYPRESS") {
+      return (e: React.KeyboardEvent) => {
         // Disable jumping to next control when pressing the space bar.
-        if (e.keyCode === 32) {
+        if (e.key === " ") {
           e.preventDefault();
         }
-        var request = new Proto.KeyboardEvent();
+        let request = new Proto.KeyboardEvent();
         request.setEventtype(
           eventType === "KEYDOWN"
             ? Proto.KeyboardEvent.KeyEventType.KEYDOWN
@@ -136,7 +167,7 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
     };
 
     // Properly handle the mouse events.
-    handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
       const { offsetX, offsetY } = e.nativeEvent;
       this.setState(
       {
@@ -153,7 +184,7 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
       );
     };
 
-    handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleMouseUp(e: React.MouseEvent<HTMLDivElement>) {
       const { offsetX, offsetY } = e.nativeEvent;
       this.setState(
       {
@@ -163,7 +194,7 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
       );
     };
 
-    handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
       // Let's not overload the endpoint with useless events.
       if (!this.state.mouse.mouseDown) return;
 
@@ -181,7 +212,7 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
      * @param {*} minIn The minimum value, the lower bound of the value param.
      * @param {*} maxIn The maximum value, the upper bound of the value param.
      */
-    scaleAxis = (value: number, minIn: number, maxIn: number) => {
+    scaleAxis(value: number, minIn: number, maxIn: number) {
       const minOut = 0x0; // EV_ABS_MIN
       const maxOut = 0x7fff; // EV_ABS_MAX
       const rangeOut = maxOut - minOut;
@@ -192,36 +223,40 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
       return (((value - minIn) * rangeOut) / rangeIn + minOut) | 0;
     };
 
-    setTouchCoordinates = (type: string, touches: TouchList, minForce: number, maxForce: number) => {
+    setTouchCoordinates(type: string, touches: TouchList, minForce: number, maxForce: number) {
       // We need to calculate the offset of the touch events.
       const rect = this.handler.current!.getBoundingClientRect();
       const scaleCoordinates = this.scaleCoordinates;
-      const touchesToSend = Object.keys(touches).map((index) => {
-      const touch = touches[index];
-      const { clientX, clientY, identifier, force, radiusX, radiusY } = touch;
-      const offsetX = clientX - rect.left;
-      const offsetY = clientY - rect.top;
-      const { x, y, scaleX, scaleY } = scaleCoordinates(offsetX, offsetY);
-      const scaledRadiusX = 2 * radiusX * (scaleX ?? 1);
-      const scaledRadiusY = 2 * radiusY * (scaleY ?? 1);
+      const touchesToSend: Proto.Touch[] = [];
+      // Even though "touches" is an array, it doesn't have map or forEach functions in some contexts,
+      // but it does always have length and item properties.
+      for (let index = 0; index < touches.length; index++) {
+        const touch = touches.item(index);
+        if (!touch) continue;
+        const { clientX, clientY, identifier, force, radiusX, radiusY } = touch;
+        const offsetX = clientX - rect.left;
+        const offsetY = clientY - rect.top;
+        const { x, y, scaleX, scaleY } = scaleCoordinates(offsetX, offsetY);
+        const scaledRadiusX = 2 * radiusX * (scaleX ?? 1);
+        const scaledRadiusY = 2 * radiusY * (scaleY ?? 1);
 
-      const protoTouch: Proto.Touch = new Proto.Touch();
-      protoTouch.setX(x | 0);
-      protoTouch.setY(y | 0);
-      protoTouch.setIdentifier(identifier);
+        const protoTouch: Proto.Touch = new Proto.Touch();
+        protoTouch.setX(x | 0);
+        protoTouch.setY(y | 0);
+        protoTouch.setIdentifier(identifier);
 
-      // Normalize the force
-      const MT_PRESSURE: number = this.scaleAxis(
-        Math.max(minForce, Math.min(maxForce, force)),
-        0,
-        1
-      );
-      protoTouch.setPressure(MT_PRESSURE);
-      protoTouch.setTouchMajor(Math.max(scaledRadiusX, scaledRadiusY) | 0);
-      protoTouch.setTouchMinor(Math.min(scaledRadiusX, scaledRadiusY) | 0);
+        // Normalize the force
+        const MT_PRESSURE: number = this.scaleAxis(
+            Math.max(minForce, Math.min(maxForce, force)),
+            0,
+            1
+        );
+        protoTouch.setPressure(MT_PRESSURE);
+        protoTouch.setTouchMajor(Math.max(scaledRadiusX, scaledRadiusY) | 0);
+        protoTouch.setTouchMinor(Math.min(scaledRadiusX, scaledRadiusY) | 0);
 
-      return protoTouch;
-      });
+        touchesToSend.push(protoTouch);
+      }
 
       // Make the grpc call.
       const requestTouchEvent: Proto.TouchEvent = new Proto.TouchEvent();
@@ -230,7 +265,7 @@ export default function withMouseKeyHandler(WrappedComponent: ReactNode) {
       jsep.send("touch", requestTouchEvent);
     };
 
-    handleTouch = (minForce: number, maxForce: number) => {
+    handleTouch(minForce: number, maxForce: number) {
       return (e: React.TouchEvent<HTMLDivElement>) => {
       // Make sure they are not processed as mouse events later on.
       // See https://developer.mozilla.org/en-US/docs/Web/API/Touch_events

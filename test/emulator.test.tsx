@@ -19,12 +19,10 @@
  */
 import "@testing-library/jest-dom";
 import "babel-polyfill";
-import { EventEmitter } from "events";
 import React from "react";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import Emulator from "../src/components/emulator/emulator";
 import * as Proto from "../src/proto/emulator_controller_pb";
-import * as Rtc from "../src/proto/rtc_service_pb";
 import {
   RtcService,
   EmulatorControllerService,
@@ -35,7 +33,7 @@ jest.mock("../src/proto/emulator_web_client");
 // See https://github.com/testing-library/react-testing-library/issues/470
 // As well as https://github.com/facebook/react/issues/10389
 // All because of the "muted" tag on our video element inside webrtc_view
-const renderIgnoringUnstableFlushDiscreteUpdates = (component) => {
+const renderIgnoringUnstableFlushDiscreteUpdates = (component: React.ReactElement) => {
   // tslint:disable: no-console
   const originalError = console.error;
   const error = jest.fn();
@@ -54,8 +52,8 @@ const renderIgnoringUnstableFlushDiscreteUpdates = (component) => {
 describe("The emulator", () => {
   beforeEach(() => {
     // Clear all instances and calls to constructor and all methods:
-    RtcService.mockClear();
-    EmulatorControllerService.mockClear();
+    (RtcService as jest.Mock).mockClear();
+    (EmulatorControllerService as jest.Mock).mockClear();
   });
 
   test("Creates gRPC services", async () => {
@@ -68,7 +66,7 @@ describe("The emulator", () => {
     // Shipped out a gps call
   });
   test("Tries to establish a webrtc connection", async () => {
-    let state;
+    let state: string;
     render(
       <Emulator
         uri="/test"
@@ -95,21 +93,18 @@ describe("The emulator", () => {
       />
     );
 
-    const setGps = EmulatorControllerService.mock.instances[0].setGps;
+    const setGps = (EmulatorControllerService as jest.Mock).mock.instances[0].setGps;
     expect(setGps).toHaveBeenCalled();
 
     const location = new Proto.GpsState();
     location.setLatitude(47.6062);
     location.setLongitude(122.3321);
-    location.setAltitude(undefined);
-    location.setBearing(undefined);
-    location.setSpeed(undefined);
     expect(setGps).toHaveBeenCalledWith(location);
   });
 
   test("The png view requests images", async () => {
-    let pngCall = false
-    EmulatorControllerService.mockImplementation(() => {
+    let pngCall = false;
+    (EmulatorControllerService as jest.Mock).mockImplementation(() => {
       return {
         streamScreenshot: jest.fn((request) => {
             pngCall = true

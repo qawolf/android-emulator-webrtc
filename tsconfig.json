@@ -8,7 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "allowSyntheticDefaultImports": true
   },
   "include": ["src"],

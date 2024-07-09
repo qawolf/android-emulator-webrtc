@@ -29,7 +29,7 @@ import {
 
 jest.mock("../src/proto/emulator_web_client");
 
-const jsepMessage = (object, uid) => {
+const jsepMessage = (object: object, uid: string) => {
   const guid = new Rtc.RtcId();
   guid.setGuid(uid);
 
@@ -39,16 +39,16 @@ const jsepMessage = (object, uid) => {
   return jsepMsg;
 };
 
-const requestRtcStream = jest.fn((request, metadata, callback) => {
+const requestRtcStream = jest.fn((request, metadata, callback: (err: Error | null, response: Rtc.RtcId) => void) => {
   const guid = new Rtc.RtcId();
   guid.setGuid("abcde");
 
   callback(null, guid);
 });
 
-const receiveJsepMessage = (message) => {
-  const jsepMsg = jsepMessage(message);
-  return jest.fn((request, metadata, callback) => {
+const receiveJsepMessage = (message: object) => {
+  const jsepMsg = jsepMessage(message, "abcde");
+  return jest.fn((request, metadata, callback: (err: Error | null, response: Rtc.JsepMsg) => void) => {
     callback(null, jsepMsg);
   });
 };
@@ -67,9 +67,9 @@ const RTCPeerConnectionMock = jest.fn().mockImplementation((cfg) => ({
 Object.defineProperty(window, "RTCPeerConnection", {
   writable: true,
   value: jest.fn().mockImplementation((cfg) => {
-    let sdp = null;
-    let signal = null;
-    let state = null;
+    let sdp: RTCSessionDescriptionInit | null = null;
+    let signal: ((e?: Event) => void) | null = null;
+    let state: string | null = null;
     return {
       ondatachannel: jest.fn(),
       createAnswer: jest.fn(() => {
@@ -80,7 +80,7 @@ Object.defineProperty(window, "RTCPeerConnection", {
       addEventListener: jest.fn(),
       addIceCandidate: jest.fn(),
       dispatchEvent: jest.fn(),
-      setRemoteDescription: (desc) => {
+      setRemoteDescription: (desc: RTCSessionDescriptionInit) => {
         sdp = desc;
         state = "have-remote-offer";
         if (signal) signal();
@@ -89,7 +89,7 @@ Object.defineProperty(window, "RTCPeerConnection", {
       get currentRemoteDescription() {
         return sdp;
       },
-      set onsignalingstatechange(fn) {
+      set onsignalingstatechange(fn: (e?: Event) => void) {
         signal = fn;
       },
       get signalingState() {
@@ -121,7 +121,7 @@ const sdp2 = {
   sdp: "fakesdp2",
   type: "offer",
 };
-const candidates_and_sdp = [
+const candidates_and_sdp: object[] = [
   {
     candidate:
       "candidate:4205781435 1 udp 2122260223 10.146.0.6 37608 typ host generation 0 ufrag Er9W network-id 1 network-cost 50",
@@ -137,15 +137,15 @@ const candidates_and_sdp = [
   sdp,
 ];
 
-const jsepProtocol = (messages) => {
-  RtcService.mockClear();
-  EmulatorControllerService.mockClear();
+const jsepProtocol = (messages: object[]) => {
+  (RtcService as jest.Mock).mockClear();
+  (EmulatorControllerService as jest.Mock).mockClear();
 
   let receive = jest.fn();
-  for (var i = 0; i < messages.length; i++) {
-    receive.mockImplementationOnce(receiveJsepMessage(messages[i]));
+  for (let i = 0; i < messages.length; i++) {
+    receive.mockImplementationOnce(() => receiveJsepMessage(messages[i]));
   }
-  RtcService.mockImplementation(() => {
+  (RtcService as jest.Mock).mockImplementation(() => {
     return {
       requestRtcStream: requestRtcStream,
       receiveJsepMessage: receive,
@@ -166,8 +166,8 @@ describe("Basic jsep protocol with polling.", () => {
   it("calls request rtc stream", () => {
     const { rtc, jsep } = jsepProtocol([{ bye: "we're done" }]);
     jsep.startStream();
-    expect(rtc.requestRtcStream.mock.calls.length).toBe(1);
-    expect(rtc.receiveJsepMessage.mock.calls.length).toBe(1);
+    expect((rtc.requestRtcStream as jest.Mock).mock.calls.length).toBe(1);
+    expect((rtc.receiveJsepMessage as jest.Mock).mock.calls.length).toBe(1);
   });
 
   it("Notifies listeners of a disconnect", () => {
@@ -207,9 +207,9 @@ describe("Basic jsep protocol with polling.", () => {
     jsep.startStream();
     expect(jsep.old_emu_patch.candidates.length).toBe(0);
     expect(jsep.peerConnection).not.toBeNull();
-    expect(jsep.peerConnection.currentRemoteDescription).not.toBeNull();
+    expect(jsep.peerConnection!.currentRemoteDescription).not.toBeNull();
     // Peer connection was initialized with rtc config
-    expect(RTCPeerConnection.mock.calls[0][0]).toStrictEqual({ foo: "bar" });
+    expect((RTCPeerConnection as unknown as jest.Mock).mock.calls[0][0]).toStrictEqual({ foo: "bar" });
   });
 
   it.skip("Never handles sdp twice / (async problem)", async () => {
@@ -220,9 +220,9 @@ describe("Basic jsep protocol with polling.", () => {
     expect(jsep.old_emu_patch.sdp).toBeNull();
     expect(jsep.old_emu_patch.answer).toBe(true);
     expect(jsep.peerConnection).not.toBeNull();
-    expect(jsep.peerConnection.currentRemoteDescription.sdp.sdp).toBe(sdp.sdp);
+    expect(jsep.peerConnection?.currentRemoteDescription?.sdp).toBe(sdp.sdp);
     // Peer connection was initialized with rtc config
-    expect(RTCPeerConnection.mock.calls[0][0]).toStrictEqual({ foo: "bar" });
-    expect(rtc.sendJsepMessage.mock.calls[0]).toBe(1);
+    expect((RTCPeerConnection as unknown as jest.Mock).mock.calls[0][0]).toStrictEqual({ foo: "bar" });
+    expect((rtc.sendJsepMessage as jest.Mock).mock.calls[0]).toBe(1);
   });
 });

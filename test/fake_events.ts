@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export function fakeMouseEvent(tp, x, y, props = {}) {
+export function fakeMouseEvent(tp: string, x: any, y: any, props = {}) {
   const event = new MouseEvent(tp, {
     bubbles: true,
     cancelable: true,
@@ -25,7 +25,7 @@ export function fakeMouseEvent(tp, x, y, props = {}) {
   return event;
 }
 
-export function fakeTouchEvent(tp, x, y, force, props = {}) {
+export function fakeTouchEvent(tp: string, x: any, y: any, force: any, props = {}) {
   const event = new TouchEvent(tp, {
     bubbles: true,
     cancelable: true,
@@ -40,11 +40,10 @@ export function fakeTouchEvent(tp, x, y, force, props = {}) {
   return event;
 }
 
-export function resize(width, height) {
+export function resize(width: number, height: number) {
   const resizeEvent = document.createEvent("Event");
   resizeEvent.initEvent("resize", true, true);
-
-  global.window.innerWidth = width || global.window.innerWidth;
-  global.window.innerHeight = height || global.window.innerHeight;
+  (global.window as any).innerWidth = width || (global.window as any).innerWidth;
+  (global.window as any).innerHeight = height || (global.window as any).innerHeight;
   global.window.dispatchEvent(resizeEvent);
 }

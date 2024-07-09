@@ -15,7 +15,8 @@
  */
 import { EventEmitter } from "events";
 import "../../../proto/emulator_controller_pb";
-import { EmulatorControllerService, NopAuthenticator } from "../../../proto/emulator_web_client";
+import {Authenticator, EmulatorControllerService, NopAuthenticator} from "../../../proto/emulator_web_client";
+import {LogMessage} from "../../../proto/emulator_controller_pb";
 
 /**
  * Observe the logcat stream from the emulator.
@@ -49,7 +50,7 @@ class Logcat {
    * @param {object} uriOrEmulator
    * @param {object} auth
    */
-  constructor(uriOrEmulator: EmulatorControllerService | string, auth: typeof NopAuthenticator) {
+  constructor(uriOrEmulator: EmulatorControllerService | string, auth: Authenticator = new NopAuthenticator()) {
     if (uriOrEmulator instanceof EmulatorControllerService) {
       this.emulator = uriOrEmulator;
     } else {
@@ -104,7 +105,7 @@ class Logcat {
   pollStream = () => {
     const self = this;
     /* eslint-disable */
-    const request = new proto.android.emulation.control.LogMessage();
+    const request = new LogMessage();
     request.setStart(this.offset);
     this.emulator.getLogcat(request, {}, (err: Error | null, response: any) => {
       if (err) {
@@ -124,7 +125,7 @@ class Logcat {
   startStream = () => {
     const self = this;
     /* eslint-disable */
-    const request = new proto.android.emulation.control.LogMessage();
+    const request = new LogMessage();
     request.setStart(this.offset);
     this.stream = this.emulator.streamLogcat(request);
     this.stream.on("data", (response: any) => {

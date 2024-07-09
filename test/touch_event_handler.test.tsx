@@ -46,7 +46,7 @@ class FakeEmulator extends React.Component {
 
 
 
-const fakeTouchEvent = (tp, x, y, force, props = {}) => {
+const fakeTouchEvent = (tp: string, x: number, y: number, force: number, props = {}) => {
   const event = new TouchEvent(tp, {
     bubbles: true,
     cancelable: true,
@@ -65,13 +65,13 @@ const TestView = withMouseKeyHandler(FakeEmulator);
 describe("The event handler", () => {
   const rtcServiceInstance = new RtcService("http://foo");
   const emulatorServiceInstance = new EmulatorControllerService("http://foo");
-  let jsep, fakeScreen;
+  let jsep: JsepProtocol, fakeScreen: HTMLElement;
 
   beforeEach(() => {
     jsep = new JsepProtocol(emulatorServiceInstance, rtcServiceInstance, true);
 
     render(<TestView emulator={emulatorServiceInstance} jsep={jsep} />);
-    fakeScreen = screen.getByTestId("fake").parentElement;
+    fakeScreen = screen.getByTestId("fake").parentElement!;
     Object.defineProperty(fakeScreen, "clientWidth", { get: () => 200 });
     Object.defineProperty(fakeScreen, "clientHeight", { get: () => 200 });
 
@@ -82,7 +82,7 @@ describe("The event handler", () => {
     fireEvent(fakeScreen, fakeTouchEvent("touchstart", 10, 10, 1.0));
 
     // EV_MAX = 0x7fff
-    expect(jsep.send.mock.calls[0][1]["array"].flat(3)[3]).toBe(0x7fff);
+    expect((jsep.send as jest.Mock).mock.calls[0][1]["array"].flat(3)[3]).toBe(0x7fff);
   });
 
 
@@ -90,7 +90,7 @@ describe("The event handler", () => {
     fireEvent(fakeScreen, fakeTouchEvent("touchstart", 10, 10, 10.0));
 
     // EV_MAX = 0x7fff
-    expect(jsep.send.mock.calls[0][1]["array"].flat(3)[3]).toBe(0x7fff);
+    expect((jsep.send as jest.Mock).mock.calls[0][1]["array"].flat(3)[3]).toBe(0x7fff);
   });
 
   test("A touch start event has a minimum value >0.01", () => {
@@ -99,7 +99,7 @@ describe("The event handler", () => {
     // Some browsers do no set the force property, which could be mistaken for
     // lift event in the emulator. We now make sure we always have a minimum
     // value.
-    expect(jsep.send.mock.calls[0][1]["array"].flat(3)[3]).toBeGreaterThanOrEqual(327);
+    expect((jsep.send as jest.Mock).mock.calls[0][1]["array"].flat(3)[3]).toBeGreaterThanOrEqual(327);
   });
 
   test("Normalizes touch end event to a pressure of 0.0 to EV_MIN", () => {
@@ -107,12 +107,12 @@ describe("The event handler", () => {
 
     // So the result we test against is a protobuf message. Protobuf
     // is optimized to not ship the value 0 and will set it to "null".
-    expect(jsep.send.mock.calls[0][1]["array"].flat(3)[3]).toBe(null);
+    expect((jsep.send as jest.Mock).mock.calls[0][1]["array"].flat(3)[3]).toBe(null);
   });
 
   test("Normalizes touch pressure of 0.5 to an integer of of +/- EV_MAX", () => {
     fireEvent(fakeScreen, fakeTouchEvent("touchstart", 10, 10, 0.5));
-    expect(jsep.send.mock.calls[0][1]["array"].flat(3)[3]).toBeGreaterThan(16380);
-    expect(jsep.send.mock.calls[0][1]["array"].flat(3)[3]).toBeLessThan(16387);
+    expect((jsep.send as jest.Mock).mock.calls[0][1]["array"].flat(3)[3]).toBeGreaterThan(16380);
+    expect((jsep.send as jest.Mock).mock.calls[0][1]["array"].flat(3)[3]).toBeLessThan(16387);
   });
 });

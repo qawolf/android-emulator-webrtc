@@ -20,7 +20,7 @@ import "@testing-library/jest-dom";
 
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import { fakeMouseEvent, fakeTouchEvent} from "./fake_events";
+import { fakeMouseEvent, fakeTouchEvent} from "./fake_events.js";
 import withMouseKeyHandler from "../src/components/emulator/views/event_handler";
 
 import JsepProtocol from "../src/components/emulator/net/jsep_protocol_driver";
@@ -50,14 +50,14 @@ describe("The event handler using a real jsep serializer", () => {
 
   const rtcServiceInstance = new RtcService("http://foo");
   const emulatorServiceInstance = new EmulatorControllerService("http://foo");
-  let jsep, fakeScreen;
+  let jsep: JsepProtocol, fakeScreen: HTMLElement;
 
   beforeEach(() => {
     jest.clearAllMocks();
     jsep = new JsepProtocol(emulatorServiceInstance, rtcServiceInstance, true);
 
     render(<TestView emulator={emulatorServiceInstance} jsep={jsep} />);
-    fakeScreen = screen.getByTestId("fake").parentElement;
+    fakeScreen = screen.getByTestId("fake").parentElement!;
     Object.defineProperty(fakeScreen, "clientWidth", { get: () => 200 });
     Object.defineProperty(fakeScreen, "clientHeight", { get: () => 200 });
 

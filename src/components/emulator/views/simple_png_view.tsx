@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import * as Proto from "../../../proto/emulator_controller_pb";
-import { EmulatorControllerService } from "../../proto/emulator_web_client";
+import {EmulatorControllerService} from "../../../proto/emulator_web_client";
+import * as emulator_controller_pb from "../../../proto/emulator_controller_pb";
 
 const EmulatorPngView = ({
   emulator,
@@ -9,18 +10,16 @@ const EmulatorPngView = ({
   poll,
   width,
   height,
-  "data-testid": dataTestId,
 }: {
   emulator: EmulatorControllerService,
-  onStateChange: (state: string) => void,
-  poll: boolean,
-  width: number,
-  height: number,
-  "data-testid": string,
-}) => {
+  onStateChange?: (state: string) => void,
+  poll?: boolean,
+  width?: number,
+  height?: number,
+}) =>  {
   const [png, setPng] = useState("");
   const [connect, setConnect] = useState("connecting");
-  var screenShot: any = null;
+  let screenShot: any = null;
 
   useEffect(() => {
     startStream();
@@ -41,10 +40,10 @@ const EmulatorPngView = ({
   const startStream = () => {
     setConnect("connecting");
     const request = new Proto.ImageFormat();
-    if (!isNaN(width)) {
+    if (width) {
       request.setWidth(Math.floor(width));
     }
-    if (!isNaN(height)) {
+    if (height) {
       request.setWidth(Math.floor(height));
     }
 
@@ -57,7 +56,7 @@ const EmulatorPngView = ({
     } else {
       var receivedImage = false;
       screenShot = emulator.streamScreenshot(request);
-      screenShot.on("data", (response: Proto.ImageResponse) => {
+      screenShot.on("data", (response: emulator_controller_pb.Image) => {
         receivedImage = true;
         setConnect("connected");
         setPng("data:image/jpeg;base64," + response.getImage_asB64());

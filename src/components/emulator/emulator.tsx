@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import PropTypes from "prop-types";
-import React, {Component, ReactNode} from "react";
+import React, {Component} from "react";
 import EmulatorPngView from "./views/simple_png_view.js";
 import EmulatorWebrtcView from "./views/webrtc_view.js";
-import withMouseKeyHandler from "./views/event_handler";
+import withMouseKeyHandler from "./views/event_handler.js";
 import JsepProtocol from "./net/jsep_protocol_driver.js";
-import * as Proto from "../../proto/emulator_controller_pb";
+import * as Proto from "../../proto/emulator_controller_pb.js";
 import {
-  RtcService,
-  EmulatorControllerService,
+    RtcService,
+    EmulatorControllerService, Authenticator, NopAuthenticator,
 } from "../../proto/emulator_web_client";
 
 const PngView = withMouseKeyHandler(EmulatorPngView);
@@ -32,11 +31,9 @@ export type EmulatorProps = {
     /** gRPC Endpoint where we can reach the emulator. */
     uri: string;
     /** The authentication service to use, or null for no authentication. */
-    auth?: any;
+    auth?: Authenticator;
     /** True if the audio should be disabled. This is only relevant when using the webrtc engine. */
     muted?: boolean;
-    /** Volume between [0, 1] when audio is enabled. 0 is muted, 1.0 is 100% */
-    volume?: number;
     /** Called upon state change, one of ["connecting", "connected", "disconnected"] */
     onStateChange?: (state: string) => void;
     /** Called when the audio becomes (un)available. True if audio is available, false otherwise. */
@@ -96,31 +93,30 @@ class Emulator extends Component {
   rtc: RtcService;
   jsep: JsepProtocol;
   view: any;
-  props: {
-      /** gRPC Endpoint where we can reach the emulator. */
-      uri: string;
-      /** The authentication service to use, or null for no authentication. */
-      auth: any;
-      /** True if the audio should be disabled. This is only relevant when using the webrtc engine. */
-      muted: boolean;
-      /** Volume between [0, 1] when audio is enabled. 0 is muted, 1.0 is 100% */
-      volume: number;
-      /** Called upon state change, one of ["connecting", "connected", "disconnected"] */
-      onStateChange: (state: string) => void;
-      /** Called when the audio becomes (un)available. True if audio is available, false otherwise. */
-      onAudioStateChange: (audio: boolean) => void;
-      /** The width of the component */
-      width: number;
-      /** The height of the component */
-      height: number;
-      /** The underlying view used to display the emulator, one of ["webrtc", "png"] */
-      view: "webrtc" | "png";
-      /** A [GeolocationCoordinates](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates) like object indicating where the device is. */
-      gps: any;
-      /** True if polling should be used, only set this to true if you are using the go webgrpc proxy. */
-      poll: boolean;
-      /** Callback that will be invoked in case of gRPC errors. */
-      onError: (e: any) => void;
+  props: EmulatorProps;
+  finalProps: {
+    /** gRPC Endpoint where we can reach the emulator. */
+    uri: string;
+    /** The authentication service to use, or null for no authentication. */
+    auth: Authenticator;
+    /** True if the audio should be disabled. This is only relevant when using the webrtc engine. */
+    muted: boolean;
+    /** Called upon state change, one of ["connecting", "connected", "disconnected"] */
+    onStateChange: (state: string) => void;
+    /** Called when the audio becomes (un)available. True if audio is available, false otherwise. */
+    onAudioStateChange: (audio: boolean) => void;
+    /** The width of the component */
+    width: number;
+    /** The height of the component */
+    height: number;
+    /** The underlying view used to display the emulator, one of ["webrtc", "png"] */
+    view: "webrtc" | "png";
+    /** A [GeolocationCoordinates](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates) like object indicating where the device is. */
+    gps: any;
+    /** True if polling should be used, only set this to true if you are using the go webgrpc proxy. */
+    poll: boolean;
+    /** Callback that will be invoked in case of gRPC errors. */
+    onError: (e: any) => void;
   };
 
   state = {
@@ -128,28 +124,28 @@ class Emulator extends Component {
   };
 
   constructor(props: EmulatorProps) {
-    super(props);
-      this.props = {
-          uri: props.uri,
-          auth: props.auth ?? null,
-          poll: props.poll ?? false,
-          muted: props.muted ?? true,
-          volume: props.volume ?? 1.0,
-          onError: props.onError ?? ((e) => {
-              console.error(e);
-          }),
-          onAudioStateChange: props.onAudioStateChange ?? ((s) => {
-              console.debug("emulator audio: " + s);
-          }),
-          onStateChange: props.onStateChange ?? ((s) => {
-              console.debug("emulator state: " + s);
-          }),
-          width: props.width ?? 1080,
-          height: props.height ?? 1920,
-          view: props.view ?? "webrtc",
-            gps: props.gps,
-      }
-    const { uri, auth, poll, onError } = this.props;
+      super(props);
+      this.props = props;
+    this.finalProps = {
+      uri: props.uri,
+      auth: props.auth ?? new NopAuthenticator(),
+      poll: props.poll ?? false,
+      muted: props.muted ?? true,
+      onError: props.onError ?? ((e) => {
+          console.error(e);
+      }),
+      onAudioStateChange: props.onAudioStateChange ?? ((s) => {
+          console.debug("emulator audio: " + s);
+      }),
+      onStateChange: props.onStateChange ?? ((s) => {
+          console.debug("emulator state: " + s);
+      }),
+      width: props.width ?? 1080,
+      height: props.height ?? 1920,
+      view: props.view ?? "webrtc",
+      gps: props.gps,
+    }
+    const { uri, auth, poll, onError } = this.finalProps;
     this.emulator = new EmulatorControllerService(uri, auth, onError);
     this.rtc = new RtcService(uri, auth, onError);
     this.jsep = new JsepProtocol(this.emulator, this.rtc, poll);
@@ -170,13 +166,13 @@ class Emulator extends Component {
   };
 
   componentDidUpdate = (prevProps: EmulatorProps) => {
-    if (prevProps.gps !== this.props.gps) {
+    if (prevProps.gps !== this.finalProps.gps) {
       this.updateLocation();
     }
   };
 
   updateLocation = () => {
-    const { gps } = this.props;
+    const { gps } = this.finalProps;
     if (typeof gps === "undefined") {
       return;
     }
@@ -187,7 +183,7 @@ class Emulator extends Component {
     state.setAltitude(gps.altitude);
     state.setBearing(gps.heading);
     state.setSpeed(gps.speed);
-    this.emulator.setGps(state);
+    this.emulator.setGps(state, null);
   };
 
   /**
@@ -205,41 +201,51 @@ class Emulator extends Component {
    * See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values for
    * a list of valid values you can send as well.
    */
-  sendKey = (key: string) => {
-    var request = new Proto.KeyboardEvent();
+  sendKey = async (key: string) => {
+    const request = new Proto.KeyboardEvent();
     request.setEventtype(Proto.KeyboardEvent.KeyEventType.KEYPRESS);
     request.setKey(key);
-    this.jsep.send("keyboard", request);
+    await this.jsep.send("keyboard", request);
   };
 
   _onAudioStateChange = (s: boolean) => {
-    const { onAudioStateChange } = this.props;
+    const { onAudioStateChange } = this.finalProps;
     this.setState({ audio: s }, () => {
       onAudioStateChange!(s);
     });
   };
 
-  render(): ReactNode {
-    const { width, height, view, poll, muted, onStateChange, onError, volume } =
-      this.props;
-    const SpecificView = view === "webrtc" ? RtcView : PngView;
+  render(): React.JSX.Element {
+    const { width, height, view, poll, muted, onStateChange, onError } =
+      this.finalProps;
 
     console.log(`render ${width}x${height}`);
     return (
-      <SpecificView
-        ref={this.view}
-        width={width}
-        height={height}
-        emulator={this.emulator}
-        jsep={this.jsep}
-        onStateChange={onStateChange}
-        poll={poll}
-        muted={muted}
-        volume={volume}
-        onError={onError}
-        onAudioStateChange={this._onAudioStateChange}
-      />
-    );
+        view === "webrtc" ? <RtcView
+            ref={this.view}
+            emulator={this.emulator}
+            jsep={this.jsep}
+            onStateChange={onStateChange}
+            poll={poll}
+            muted={muted}
+            onError={onError}
+            onAudioStateChange={this._onAudioStateChange}
+            // width and height are not used in RtcView but needed to satisfy the type requirement of withMouseKeyHandler.
+            width={width}
+            height={height}
+        /> : <PngView
+            ref={this.view}
+            width={width}
+            height={height}
+            emulator={this.emulator}
+            jsep={this.jsep}
+            onStateChange={onStateChange}
+            poll={poll}
+            muted={muted}
+            onError={onError}
+            onAudioStateChange={this._onAudioStateChange}
+        />
+    )
   }
 }
 

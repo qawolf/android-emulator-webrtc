@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import PropTypes from "prop-types";
 import React, { RefObject, useEffect, useRef, useState } from "react";
-import JsepProtocol from "./net/jsep_protocol_driver.js";
+import JsepProtocol from "../net/jsep_protocol_driver.js";
 
 const EmulatorWebrtcView = ({
   jsep,
   onStateChange,
   onAudioStateChange,
   muted,
-  volume,
   onError,
 }: {
   jsep: JsepProtocol;
   onStateChange: (state: string) => void;
   onAudioStateChange: (state: boolean) => void;
   muted: boolean;
-  volume: number;
   onError: (error: any) => void;
 }) => {
   const [audio, setAudio] = useState(false);

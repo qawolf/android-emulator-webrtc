@@ -16,6 +16,8 @@
 import { EventEmitter } from "events";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { EmulatorControllerService, RtcService } from "../../../proto/emulator_web_client";
+import {JsepMsg, RtcId} from "../../../proto/rtc_service_pb";
+import {RpcError} from "grpc-web";
 /**
  * This drives the jsep protocol with the emulator, and can be used to
  * send key/mouse/touch events to the emulator. Events will be send
@@ -46,7 +48,7 @@ export default class JsepProtocol {
   rtc: RtcService;
   events: EventEmitter;
   poll: boolean;
-  guid: string | null;
+  guid?: RtcId;
   stream: any;
   peerConnection?: RTCPeerConnection | null;
   old_emu_patch: {
@@ -73,8 +75,8 @@ export default class JsepProtocol {
     emulator: EmulatorControllerService,
     rtc: RtcService,
     poll: boolean,
-    onConnect: ((stream: any) => void) | undefined,
-    onDisconnect: ((stream: any) => void) | undefined
+    onConnect?: ((stream: any) => void),
+    onDisconnect?: ((stream: any) => void)
   ) {
     this.emulator = emulator;
     this.rtc = rtc;
@@ -90,7 +92,6 @@ export default class JsepProtocol {
     };
 
     this.poll = poll;
-    this.guid = null;
     this.stream = null;
     this.event_forwarders = {};
     if (onConnect) this.events.on("connected", onConnect);
@@ -140,7 +141,7 @@ export default class JsepProtocol {
       answer: false,
     };
     var request = new Empty();
-    this.rtc.requestRtcStream(request, {}, (err: any, response: string) => {
+    this.rtc.requestRtcStream(request, {}, (err: RpcError, response: RtcId) => {
       if (err) {
         console.error("Failed to configure rtc stream: " + JSON.stringify(err));
         this.disconnect();
@@ -199,7 +200,7 @@ export default class JsepProtocol {
     }
   };
 
-  send(label: string, msg: any) {
+  async send(label: string, msg: any) {
     let bytes: Uint8Array = msg.serializeBinary();
     let forwarder = this.event_forwarders[label];
     console.log("Send " + label + " " + JSON.stringify(msg.toObject()));
@@ -210,13 +211,13 @@ export default class JsepProtocol {
       // Fallback to using the gRPC protocol
       switch (label) {
         case "mouse":
-          this.emulator.sendMouse(msg);
+          await this.emulator.sendMouse(msg, null);
           break;
         case "keyboard":
-          this.emulator.sendKey(msg);
+          await this.emulator.sendKey(msg, null);
           break;
         case "touch":
-          this.emulator.sendTouch(msg);
+          await this.emulator.sendTouch(msg, null);
           break;
       }
     }
@@ -332,14 +333,14 @@ export default class JsepProtocol {
 
   _sendJsep = (jsonObject: any): void => {
     /* eslint-disable */
-    var request: proto.android.emulation.control.JsepMsg = new proto.android.emulation.control.JsepMsg();
+    const request = new JsepMsg();
     request.setId(this.guid);
     request.setMessage(JSON.stringify(jsonObject));
-    this.rtc.sendJsepMessage(request);
+    this.rtc.sendJsepMessage(request, null);
   };
 
   _streamJsepMessage = () => {
-    if (!this.connected) return;
+    if (!this.connected || !this.guid) return;
     var self = this;
 
     this.stream = this.rtc.receiveJsepMessages(this.guid, {});
@@ -364,7 +365,7 @@ export default class JsepProtocol {
 
   // This function is a fallback for v1 (go based proxy), that does not support streaming.
   _receiveJsepMessage = () => {
-    if (!this.connected) return;
+    if (!this.connected || !this.guid) return;
 
     var self = this;
 
